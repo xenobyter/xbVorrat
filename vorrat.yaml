@@ -1,0 +1,73 @@
+openapi: "3.0.2"
+info:
+  title: xbVorrat API
+  version: "0.1.0"
+  description: |
+    Die API für xbVorrat ermöglicht die Verwaltung von zu bevoratenden Gegenständen in Lagerboxen.
+
+    ### Änderungen
+    0.1.0 - Erstellt
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /health:
+    get:
+      summary: "Ein simpler health-check"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: integer
+                    minimum: 1
+  /boxes:
+    get:
+      summary: "Eine Liste aller angelegten Boxen. Wenn keine Boxen angelegt sind, wird eine leere Liste zurück gegeben."
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref:  "#/components/schemas/BoxID"
+    put:
+      summary: Anlegen einer neuen Box.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref:  "#/components/schemas/Box"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/BoxID"
+components:
+  schemas:
+    Box:
+      type: object
+      properties:
+        name:
+          type: string
+        notiz:
+          type: string
+          nullable: true
+    BoxID: 
+      allOf:
+        - type: object
+          properties:
+            id: 
+              type: integer
+        - $ref: "#/components/schemas/Box"
+
+
+
