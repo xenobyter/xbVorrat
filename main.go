@@ -1,17 +1,10 @@
 package main
 
-import (
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
-)
+import "github.com/xenobyter/xbVorrat/api"
+
 
 func main() {
-	r := gin.Default()
-	r.Use(cors.Default())
-	r.GET("/api/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"version": 1,
-		})
-	})
-	r.Run()
+	router := api.SetupRouter()
+	router.Run()
 }
+

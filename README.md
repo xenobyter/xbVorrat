@@ -1,7 +1,7 @@
 # xbVorrat
 
 ## NICHT BENUTZEN
-Dieses Projekt ist nur zum Lernen gedacht. Ich rate dringend vond er Benutzung ab.
+Dieses Projekt ist nur zum Lernen gedacht. Ich rate dringend von der Benutzung ab.
 ## Datenstruktur
 Ein einzelner Gegenstand im Vorrat hat folgende Eigenschaften:
 * struc Gegenstand
