@@ -4,9 +4,15 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "debug",
+            "type": "shell",
+            "command": "~/go/bin/dlv debug --headless --listen=:2345 --log --api-version=2",
+            "problemMatcher": []
+        },
+        {
             "label": "run",
             "type": "shell",
-            "command": "go run .",
+            "command": "go run ${workspaceFolder}/.",
             "problemMatcher": [
                 "$go"
             ]

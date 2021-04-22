@@ -8,10 +8,12 @@ info:
     ### Änderungen
     0.1.0 - Erstellt
 servers:
-  - url: http://localhost:8080/api
+  - url: http://localhost:8081/api
 paths:
   /health:
     get:
+      tags:
+        - Test-API
       summary: "Ein simpler health-check"
       responses:
         "200":
@@ -26,7 +28,9 @@ paths:
                     minimum: 1
   /boxes:
     get:
-      summary: "Eine Liste aller angelegten Boxen. Wenn keine Boxen angelegt sind, wird eine leere Liste zurück gegeben."
+      tags:
+        - Boxen verwalten
+      summary: "Eine Liste aller angelegten Boxen. Wenn keine Boxen angelegt sind, wird null zurück gegeben."
       responses:
         "200":
           description: OK
@@ -35,22 +39,71 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref:  "#/components/schemas/BoxID"
+                  $ref: "#/components/schemas/BoxID"
     put:
+      tags:
+        - "Boxen verwalten"
       summary: Anlegen einer neuen Box.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref:  "#/components/schemas/Box"
+              $ref: "#/components/schemas/Box"
       responses:
         "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref:  "#/components/schemas/BoxID"
+                $ref: "#/components/schemas/BoxID"
+        "400":
+          $ref: "#/components/responses/400"
+  /boxes/{id}:
+    patch:
+      tags:
+        - "Boxen verwalten"
+      summary: Änderungen am Namen oder der Notiz einer Box.
+      parameters:
+        - name: id
+          in: path
+          description: Die Id der zu ändernden Box
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: "#/components/schemas/Box"
+      responses:
+        "204":
+          $ref: "#/components/responses/204"
+        "400":
+          $ref:  "#/components/responses/400"
+        "404":
+          $ref:  "#/components/responses/404"
+    delete:
+      tags:
+        - "Boxen verwalten"
+      summary: Löschen einer Box.
+      parameters:
+        - name: id
+          in: path
+          description: Die Id der zu löschenden Box
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "204":
+          $ref: "#/components/responses/204"
+        "400":
+          $ref:  "#/components/responses/400"
+        "404":
+          $ref:  "#/components/responses/404"
 components:
   schemas:
     Box:
@@ -58,16 +111,22 @@ components:
       properties:
         name:
           type: string
+          example: Box1
         notiz:
           type: string
+          example: Notiz1
           nullable: true
-    BoxID: 
+    BoxID:
       allOf:
         - type: object
           properties:
-            id: 
+            id:
               type: integer
         - $ref: "#/components/schemas/Box"
-
-
-
+  responses:
+    "204":
+      description: No Content - Es gibt keinen Inhalt, den man für diese Anfrage senden kann, aber die Kopfzeilen können nützlich sein.
+    "400":
+      description: Bad Request - Diese Antwort bedeutet, dass der Server die Anfrage aufgrund einer ungültigen Syntax nicht verstehen konnte.
+    "404":
+      description: Not Found - Der Server kann die angeforderte Ressource nicht finden.

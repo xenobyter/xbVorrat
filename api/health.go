@@ -1,9 +1,13 @@
 package api
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
 
-func health(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"version": 1,
-	})
+	"github.com/gin-gonic/gin"
+)
+
+func healthGET(c *gin.Context) {
+	var res = make(map[string]int)
+	res["version"] = 1
+	c.JSON(http.StatusOK, res)
 }
