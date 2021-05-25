@@ -10,12 +10,22 @@
             "problemMatcher": []
         },
         {
-            "label": "run",
+            "label": "run go",
             "type": "shell",
             "command": "go run ${workspaceFolder}/.",
             "problemMatcher": [
                 "$go"
             ]
-        }
+        },
+        {
+            "type": "npm",
+            "script": "serve",
+            "path": "app/",
+            "problemMatcher": [
+                "$eslint-compact"
+            ],
+            "label": "run app",
+            "detail": "vue-cli-service serve"
+        },
     ]
 }
