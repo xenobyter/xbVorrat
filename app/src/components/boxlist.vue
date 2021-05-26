@@ -28,6 +28,7 @@
         :box="box"
       />
     </ul>
+    <div class="status">{{ status }}</div>
   </div>
 </template>
 
@@ -45,6 +46,7 @@ export default {
       boxes: [],
       showedit: false,
       box: Object,
+      status: "",
     };
   },
   methods: {
@@ -54,12 +56,13 @@ export default {
         .then((response) => {
           this.boxes = response.data;
         })
-        .catch((error) => {
+        .catch((e) => {
           this.boxes = [
             { id: 1, name: "Fehler", notiz: "Fehler beim Abruf" },
             { id: 2, name: "Fehler", notiz: "Fehler beim Abruf" },
           ];
-          console.log("GET", error);
+          console.log("GET", e);
+          this.status = "GET: " + e.message;
         });
     },
     boxDELETE(box) {
@@ -73,8 +76,8 @@ export default {
           this.boxes.splice(index, 1);
         })
         .catch((e) => {
-          console.error("DELETE", e.message); 
-          // TODO: Fehler nicht nur loggen sondern in der App anzeigen, eine Art Statusleiste oder ähnliches
+          console.error("DELETE", e.message);
+          this.status = "DELETE: " + e.message;
         });
     },
     boxEDIT(box) {
@@ -97,8 +100,9 @@ export default {
           this.boxes[index] = { ...box };
           console.log("Status:", response.status);
         })
-        .catch((error) => {
-          console.log("PATCH", error);
+        .catch((e) => {
+          console.log("PATCH", e);
+          this.status = "PATCH: " + e.message;
         });
     },
     boxAdd() {
@@ -122,8 +126,9 @@ export default {
           const index = this.boxes.indexOf(box);
           this.boxes[index].id = response.data.id;
         })
-        .catch((error) => {
-          console.log("PUT", error);
+        .catch((e) => {
+          console.log("PUT", e);
+          this.status = "PUT: " + e.message;
         });
     },
   },
@@ -134,20 +139,22 @@ export default {
 </script>
 
 <style scoped>
+h1 {
+  text-align: center;
+}
 ul {
   margin: 0;
   padding: 0;
   list-style-type: none;
 }
 li {
-  margin: 0.5em;
+  margin: 0.5rem;
 }
 .box {
+  margin: 0 1rem 0 1rem;
   overflow: hidden;
-  margin: 0 1em 0 1em;
   display: flex;
   background-color: gainsboro;
-  justify-content: space-between;
 }
 .boxLeft,
 .boxMain {
@@ -156,9 +163,9 @@ li {
   justify-content: center;
 }
 .boxLeft {
-  padding: 0 0.5em 0 0;
-  min-width: 2em;
-  max-width: 4em;
+  padding: 0 0.5rem 0 0;
+  min-width: 2rem;
+  max-width: 4rem;
   text-align: right;
 }
 .boxMain {
@@ -167,9 +174,20 @@ li {
 .boxNotiz {
   font-size: small;
   color: rgb(160, 160, 160);
-  min-height: 1.2em;
+  min-height: 1.2rem;
 }
 .boxRight {
   justify-content: flex-end;
+}
+.status {
+  background-color: gainsboro;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  width: 100vw;
+  height: 1.4rem;
+  bottom: 0px;
+  margin-left: 0px;
 }
 </style>>

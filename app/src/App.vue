@@ -5,13 +5,13 @@
 
 <script>
 import boxlist from "./components/boxlist.vue";
-import information from "./components/information.vue";
+// import information from "./components/information.vue";
 
 export default {
   name: "App",
   components: {
     boxlist,
-    information,
+    // information,
   },
 };
 </script>
@@ -22,5 +22,8 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+}
+body {
+  margin-left: 0px;
 }
 </style>
