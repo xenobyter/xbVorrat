@@ -3,7 +3,7 @@ info:
   title: xbVorrat API
   version: "0.1.0"
   description: |
-    Die API für xbVorrat ermöglicht die Verwaltung von zu bevoratenden Gegenständen in Lagerboxen.
+    Die API für xbVorrat ermöglicht die Verwaltung von zu bevorratenden Gegenständen in Lagerboxen.
 
     ### Änderungen
     0.1.0 - Erstellt
@@ -104,6 +104,85 @@ paths:
           $ref:  "#/components/responses/400"
         "404":
           $ref:  "#/components/responses/404"
+  /units:
+    get:
+      tags:
+        - "Einheiten verwalten"
+      summary: Eine Liste aller angelegten Einheiten. Wenn keine Einheiten angelegt sind, null zurück gegeben.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UnitID"
+    put:
+      tags:
+        - "Einheiten verwalten"
+      summary: Anlegen einer neuen Einheit.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Unit"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnitID"
+        "400":
+          $ref: "#/components/responses/400"
+  /units/{id}:
+    patch:
+      tags:
+        - "Einheiten verwalten"
+      summary: Änderungen einer Einheit oder ihres Langtextes.
+      parameters:
+        - name: id
+          in: path
+          description: Die Id der zu ändernden Einheit
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: "#/components/schemas/Unit"
+      responses:
+        "204":
+          $ref: "#/components/responses/204"
+        "400":
+          $ref:  "#/components/responses/400"
+        "404":
+          $ref:  "#/components/responses/404"
+    delete:
+      tags:
+        - "Einheiten verwalten"
+      summary: Löschen einer Einheit.
+      parameters:
+        - name: id
+          in: path
+          description: Die Id der zu löschenden Einheit
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "204":
+          $ref: "#/components/responses/204"
+        "400":
+          $ref:  "#/components/responses/400"
+        "404":
+          $ref:  "#/components/responses/404"
+
 components:
   schemas:
     Box:
@@ -123,6 +202,23 @@ components:
             id:
               type: integer
         - $ref: "#/components/schemas/Box"
+    Unit:
+      type: object
+      properties:
+        unit:
+          type: string
+          example: kg
+        long:
+          type: string
+          example: Kilogramm
+          nullable: true
+    UnitID:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+        - $ref: "#/components/schemas/Unit"
   responses:
     "204":
       description: No Content - Es gibt keinen Inhalt, den man für diese Anfrage senden kann, aber die Kopfzeilen können nützlich sein.

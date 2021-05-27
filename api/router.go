@@ -15,6 +15,11 @@ func SetupRouter() *gin.Engine {
 	router.PUT("/api/boxes", boxesPUT)
 	router.PATCH("/api/boxes/:id", boxesPATCH)
 	router.DELETE("/api/boxes/:id", boxesDELETE)
-
+	
+	router.GET("/api/units", unitsGET) 
+	router.PUT("/api/units", unitsPUT) 
+	router.PATCH("/api/units/:id", unitsPATCH)
+	router.DELETE("/api/units/:id", unitsDELETE)
+	
 	return router
 }

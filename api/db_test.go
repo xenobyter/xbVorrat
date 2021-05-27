@@ -149,3 +149,123 @@ func Test_dbBoxesDELETE(t *testing.T) {
 
 	teardownDB()
 }
+
+func Test_dbUnitsPUT(t *testing.T) {
+	setupDB()
+
+	tests := []struct {
+		name   string
+		unit   Unit
+		wantId int64
+	}{
+		{"Erste Einheit erstellen", Unit{"Box2", "Notiz2"}, 1},
+		{"Zweite Einheit erstellen", Unit{"Box3", "Notiz3"},2},
+	}
+	for _, tt := range tests {
+		log.Println(tt.name)
+		t.Run(tt.name, func(t *testing.T) {
+			if gotId := dbUnitsPUT(tt.unit); gotId != tt.wantId {
+				t.Errorf("dbUnitsPUT() = %v, want %v", gotId, tt.wantId)
+			}
+		})
+	}
+
+	teardownDB()
+}
+
+func TestUnitsGET(t *testing.T) {
+	setupDB()
+
+	tests := []struct {
+		name string
+		want Units
+	}{
+		{"Leere Liste", nil},
+		{"Eine Einheit", Units{{1, "unit", "long"}}},
+		{"Zweite Einheit", Units{{1, "unit", "long"}, {2, "unit", "long"}}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := dbUnitsGET(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Units() = %v, want %v", got, tt.want)
+			}
+			dbUnitsPUT(Unit{"unit", "long"})
+		})
+	}
+
+	teardownDB()
+}
+
+func Test_dbUnitsPATCH(t *testing.T) {
+	setupDB()
+
+	type args struct {
+		id  int64
+		unit Unit
+	}
+	tests := []struct {
+		name       string
+		args       args
+		wantStatus int
+		wantUnit   string
+		wantLong  string
+	}{
+		{"PATCH bei leerer DB", args{10, Unit{"neu", ""}}, http.StatusNotFound, "", ""},
+		{"PATCH falsche ID", args{0, Unit{"neu", ""}}, http.StatusNotFound, "", ""},
+		{"PATCH Einheit", args{1, Unit{"neu", ""}}, http.StatusNoContent, "neu", ""},
+		{"PATCH Einheit und Langtext", args{1, Unit{"neu1", "neu1"}}, http.StatusNoContent, "neu1", "neu1"},
+		{"PATCH Langtext leeren", args{1, Unit{"neu1", ""}}, http.StatusNoContent, "neu1", ""},
+		{"PATCH Einheit nicht leeren", args{1, Unit{"", "neu"}}, http.StatusBadRequest, "neu1", ""},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			status := dbUnitsPATCH(tt.args.id, tt.args.unit)
+			if status != tt.wantStatus {
+				t.Errorf("dbUnitsPATCH() status = %v, wantStatus %v", status, tt.wantStatus)
+			}
+			units := dbUnitsGET()
+			if len(units) != 0 && status != http.StatusNotFound {
+				unit := units[tt.args.id-1]
+				if unit.Unit != tt.wantUnit || unit.Long != tt.wantLong {
+					t.Errorf("dbUnitsPATCH() unit = %v, long = %v, wantunit %v, WantLong %v", unit.Unit, unit.Long, tt.wantUnit, tt.wantLong)
+				}
+			} else {
+				//db ist leer, einmalig eine box anlegen
+				dbUnitsPUT(Unit{"unit", "long"})
+			}
+		})
+	}
+
+	teardownDB()
+}
+
+func Test_dbUnitsDELETE(t *testing.T) {
+	setupDB()
+
+	type args struct {
+		id int64
+	}
+	tests := []struct {
+		name       string
+		args       args
+		wantStatus int
+		wantUnits  Units
+	}{
+		{"DELETE bei leerer DB", args{1}, http.StatusNotFound, nil},
+		{"DELETE Falsche id", args{10}, http.StatusNotFound, Units{{1, "name", "notiz"}}},
+		{"DELETE ID 1", args{1}, http.StatusNoContent, Units{{2, "name", "notiz"}}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotStatus := dbUnitsDELETE(tt.args.id); gotStatus != tt.wantStatus {
+				t.Errorf("dbUnitsDELETE() = %v, want %v", gotStatus, tt.wantStatus)
+			}
+			if gotunits := dbUnitsGET(); !reflect.DeepEqual(gotunits, tt.wantUnits) {
+				t.Errorf("dbUnitsDELETE() = %v, want %v", gotunits, tt.wantUnits)
+			}
+		})
+		dbUnitsPUT(Unit{"name", "notiz"})
+	}
+
+	teardownDB()
+}
