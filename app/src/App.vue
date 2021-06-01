@@ -1,17 +1,20 @@
 <template>
   <boxlist />
+  <unitlist />
   <information />
 </template>
 
 <script>
 import boxlist from "./components/boxlist.vue";
-// import information from "./components/information.vue";
+import unitlist from "./components/unitlist"
+import information from "./components/information.vue";
 
 export default {
   name: "App",
   components: {
     boxlist,
-    // information,
+    unitlist,
+    information,
   },
 };
 </script>
