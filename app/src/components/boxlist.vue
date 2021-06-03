@@ -139,22 +139,18 @@ export default {
 </script>
 
 <style scoped>
-h1 {
-  text-align: center;
-}
 ul {
   margin: 0;
   padding: 0;
   list-style-type: none;
 }
 li {
-  margin: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 .box {
-  margin: 0 1rem 0 1rem;
   overflow: hidden;
   display: flex;
-  background-color: gainsboro;
+  background-color: var(--listen-hintergrund);
 }
 .boxLeft,
 .boxMain {
@@ -180,7 +176,7 @@ li {
   justify-content: flex-end;
 }
 .status {
-  background-color: gainsboro;
+  background-color: var(--listen-hintergrund);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -190,4 +186,4 @@ li {
   bottom: 0px;
   margin-left: 0px;
 }
-</style>>
+</style>
