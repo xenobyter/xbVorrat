@@ -2,6 +2,8 @@
     "browser-preview.startUrl": "http://localhost:8080",
     "cSpell.words": [
         "gonic",
-        "rowid"
+        "mattn",
+        "rowid",
+        "sqlite"
     ]
 }

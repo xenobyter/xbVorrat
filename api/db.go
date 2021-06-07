@@ -2,6 +2,7 @@ package api
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -68,20 +69,6 @@ func dbBoxesPATCH(id int64, box Box) int {
 	return http.StatusBadRequest
 }
 
-func dbBoxesDELETE(id int64) int {
-	res, err := db.Exec("DELETE FROM boxes WHERE rowid = ?", id)
-	cnt, _ := res.RowsAffected()
-	switch {
-	case err != nil:
-		return http.StatusBadRequest
-	case cnt == 0:
-		return http.StatusNotFound
-	case cnt == 1:
-		return http.StatusNoContent
-	}
-	return http.StatusBadRequest
-}
-
 func dbUnitsPUT(unit Unit) (id int64) {
 	result, err := db.Exec("INSERT INTO units (unit, long) VALUES (?, ?);", unit.Unit, unit.Long)
 	if err != nil {
@@ -121,20 +108,6 @@ func dbUnitsPATCH(id int64, unit Unit) int {
 		case cnt == 1:
 			return http.StatusNoContent
 		}
-	}
-	return http.StatusBadRequest
-}
-
-func dbUnitsDELETE(id int64) int {
-	res, err := db.Exec("DELETE FROM units WHERE rowid = ?", id)
-	cnt, _ := res.RowsAffected()
-	switch {
-	case err != nil:
-		return http.StatusBadRequest
-	case cnt == 0:
-		return http.StatusNotFound
-	case cnt == 1:
-		return http.StatusNoContent
 	}
 	return http.StatusBadRequest
 }
@@ -182,16 +155,16 @@ func dbArticlesPATCH(id int64, article Article) int {
 	return http.StatusBadRequest
 }
 
-func dbArticlesDELETE(id int64) int { //ToDo Refactor: alle DELETE-funcs könnten zusammen gelegt werden
-	res, err := db.Exec("DELETE FROM articles WHERE rowid = ?", id)
-	cnt, _ := res.RowsAffected()
-	switch {
-	case err != nil:
+func dbDeleteByID(table string, id int64) int {
+	sql:=fmt.Sprint("DELETE FROM ", table, " WHERE rowid = ?")
+	res, err := db.Exec(sql, id)
+	if err != nil {
+		log.Fatal(err)
 		return http.StatusBadRequest
-	case cnt == 0:
-		return http.StatusNotFound
-	case cnt == 1:
-		return http.StatusNoContent
 	}
-	return http.StatusBadRequest
+	if cnt, _ := res.RowsAffected(); cnt == 0 {
+		return http.StatusNotFound
+	}
+	return http.StatusNoContent
+
 }

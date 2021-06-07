@@ -68,7 +68,6 @@ export default {
     unitDELETE(unit) {
       this.unit = unit;
       const index = this.units.indexOf(this.unit);
-      //TODO: Im BE prüfen, ob die unit leer ist
       axios
         .delete("http://localhost:8081/api/units/" + unit.id, { timeout: 900 })
         .then((response) => {

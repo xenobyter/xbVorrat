@@ -119,6 +119,7 @@ func TestPATCHUnits(t *testing.T) {
 func TestDELETEUnits(t *testing.T) {
 	setupDB()
 	router := SetupRouter()
+	dbArticlesPUT(Article{"name", 2})
 
 	tests := []struct {
 		name   string
@@ -132,6 +133,7 @@ func TestDELETEUnits(t *testing.T) {
 		{"DELETE ID 1", "DELETE", "/api/units/1", ``, "", 204},
 		{"DELETE mit ungültiger ID", "DELETE", "/api/units/invalid", ``, "", 400},
 		{"DELETE falscher ID", "DELETE", "/api/units/20", ``, "", 404},
+		{"DELETE Einheit wird in Artikel benutzt", "DELETE", "/api/units/2", ``, "", 409},
 	}
 	for _, tt := range tests {
 
@@ -164,8 +166,8 @@ func TestUnits_contains(t *testing.T) {
 		args args
 		want bool
 	}{
-		{"Einfaches true", Units{{1,"kg", "Kilogramm"}},args{1},true},
-		{"Einfaches false", Units{{1,"kg", "Kilogramm"}},args{2},false},
+		{"Einfaches true", Units{{1, "kg", "Kilogramm"}}, args{1}, true},
+		{"Einfaches false", Units{{1, "kg", "Kilogramm"}}, args{2}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

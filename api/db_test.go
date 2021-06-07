@@ -123,7 +123,8 @@ func Test_dbBoxesDELETE(t *testing.T) {
 	setupDB()
 
 	type args struct {
-		id int64
+		table string
+		id    int64
 	}
 	tests := []struct {
 		name       string
@@ -131,17 +132,17 @@ func Test_dbBoxesDELETE(t *testing.T) {
 		wantStatus int
 		wantBoxes  Boxes
 	}{
-		{"DELETE bei leerer DB", args{1}, http.StatusNotFound, nil},
-		{"DELETE Falsche id", args{10}, http.StatusNotFound, Boxes{{1, "name", "notiz"}}},
-		{"DELETE ID 1", args{1}, http.StatusNoContent, Boxes{{2, "name", "notiz"}}},
+		{"DELETE bei leerer DB", args{`boxes`, 1}, http.StatusNotFound, nil},
+		{"DELETE Falsche id", args{"boxes", 10}, http.StatusNotFound, Boxes{{1, "name", "notiz"}}},
+		{"DELETE ID 1", args{"boxes", 1}, http.StatusNoContent, Boxes{{2, "name", "notiz"}}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if gotStatus := dbBoxesDELETE(tt.args.id); gotStatus != tt.wantStatus {
-				t.Errorf("dbBoxesDELETE() = %v, want %v", gotStatus, tt.wantStatus)
+			if gotStatus := dbDeleteByID(tt.args.table, tt.args.id); gotStatus != tt.wantStatus {
+				t.Errorf("dbDeleteByID() = %v, want %v", gotStatus, tt.wantStatus)
 			}
 			if gotBoxes := dbBoxesGET(); !reflect.DeepEqual(gotBoxes, tt.wantBoxes) {
-				t.Errorf("dbBoxesDELETE() = %v, want %v", gotBoxes, tt.wantBoxes)
+				t.Errorf("dbDeleteByID() = %v, want %v", gotBoxes, tt.wantBoxes)
 			}
 		})
 		dbBoxesPUT(Box{"name", "notiz"})
@@ -243,7 +244,8 @@ func Test_dbUnitsDELETE(t *testing.T) {
 	setupDB()
 
 	type args struct {
-		id int64
+		table string
+		id    int64
 	}
 	tests := []struct {
 		name       string
@@ -251,13 +253,13 @@ func Test_dbUnitsDELETE(t *testing.T) {
 		wantStatus int
 		wantUnits  Units
 	}{
-		{"DELETE bei leerer DB", args{1}, http.StatusNotFound, nil},
-		{"DELETE Falsche id", args{10}, http.StatusNotFound, Units{{1, "name", "notiz"}}},
-		{"DELETE ID 1", args{1}, http.StatusNoContent, Units{{2, "name", "notiz"}}},
+		{"DELETE bei leerer DB", args{"units", 1}, http.StatusNotFound, nil},
+		{"DELETE Falsche id", args{"units", 10}, http.StatusNotFound, Units{{1, "name", "notiz"}}},
+		{"DELETE ID 1", args{"units", 1}, http.StatusNoContent, Units{{2, "name", "notiz"}}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if gotStatus := dbUnitsDELETE(tt.args.id); gotStatus != tt.wantStatus {
+			if gotStatus := dbDeleteByID(tt.args.table, tt.args.id); gotStatus != tt.wantStatus {
 				t.Errorf("dbUnitsDELETE() = %v, want %v", gotStatus, tt.wantStatus)
 			}
 			if gotunits := dbUnitsGET(); !reflect.DeepEqual(gotunits, tt.wantUnits) {
@@ -351,20 +353,24 @@ func Test_dbArticlesPATCH(t *testing.T) {
 
 func Test_dbArticlesDELETE(t *testing.T) {
 	setupDB()
-	
+
+	type args struct {
+		table string
+		id    int64
+	}
 	tests := []struct {
 		name         string
-		id           int64
+		args         args
 		wantStatus   int
 		wantArticles Articles
 	}{
-		{"DELETE bei leerer DB", 1, http.StatusNotFound, nil},
-		{"DELETE korrekter Artikel", 1, http.StatusNoContent, nil},
-		{"DELETE falscher Artikel", 10, http.StatusNotFound, Articles{{1, "name", 1}}},
+		{"DELETE bei leerer DB", args{"articles", 1}, http.StatusNotFound, nil},
+		{"DELETE korrekter Artikel", args{"articles", 1}, http.StatusNoContent, nil},
+		{"DELETE falscher Artikel", args{"articles", 10}, http.StatusNotFound, Articles{{1, "name", 1}}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if gotStatus := dbArticlesDELETE(tt.id); gotStatus != tt.wantStatus {
+			if gotStatus :=dbDeleteByID(tt.args.table,tt.args.id); gotStatus != tt.wantStatus {
 				t.Errorf("dbArticlesDELETE() = %v, want %v", gotStatus, tt.wantStatus)
 			}
 			if gotArticles := dbArticlesGET(); !reflect.DeepEqual(gotArticles, tt.wantArticles) {

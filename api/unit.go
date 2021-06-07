@@ -67,12 +67,16 @@ func unitsPATCH(c *gin.Context) {
 	}
 }
 
-func unitsDELETE(c *gin.Context) { //TODO: Einheiten nur löschen, wenn sie nicht benutzt werden
+func unitsDELETE(c *gin.Context) {
+	articles := dbArticlesGET()
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-	if err != nil {
+	switch {
+	case err != nil:
 		c.Status(http.StatusBadRequest)
-	} else {
-		status := dbUnitsDELETE(id)
+	case articles.contains(id):
+		c.Status(http.StatusConflict)
+	default:
+		status := dbDeleteByID("units", id)
 		c.Status(status)
 	}
 }

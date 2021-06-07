@@ -19,6 +19,15 @@ type Articles []struct {
 	UnitID int64  `json:"unit"`
 }
 
+func (a Articles) contains(id int64) bool {
+	for _, n := range a {
+		if id == n.UnitID {
+			return true
+		}
+	}
+	return false
+}
+
 func articlesPUT(c *gin.Context) {
 	var article Article
 	err := c.BindJSON(&article)
@@ -74,7 +83,7 @@ func articlesDELETE(c *gin.Context) { //TODO: Artikel nur löschen, wenn sie nic
 	if err != nil {
 		c.Status(http.StatusBadRequest)
 	} else {
-		status := dbArticlesDELETE(id)
+		status := dbDeleteByID("articles", id)
 		c.Status(status)
 	}
 }

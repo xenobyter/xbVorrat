@@ -63,7 +63,7 @@ func boxesDELETE(c *gin.Context) {
 	if err != nil {
 		c.Status(http.StatusBadRequest)
 	} else {
-		status := dbBoxesDELETE(id)
+		status := dbDeleteByID("boxes", id)
 		c.Status(status)
 	}
 }

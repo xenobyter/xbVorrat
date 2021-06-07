@@ -159,3 +159,25 @@ func Test_articlesDELETE(t *testing.T) {
 
 	teardownDB()
 }
+
+func TestArticles_contains(t *testing.T) {
+	type args struct {
+		id int64
+	}
+	tests := []struct {
+		name string
+		a    Articles
+		args args
+		want bool
+	}{
+		{"Einfaches true",Articles{{3,"name",1}},args{1},true},
+		{"Einfaches false",Articles{{3,"name",1}},args{2},false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.a.contains(tt.args.id); got != tt.want {
+				t.Errorf("Articles.contains() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
