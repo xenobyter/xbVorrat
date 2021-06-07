@@ -182,6 +182,88 @@ paths:
           $ref:  "#/components/responses/400"
         "404":
           $ref:  "#/components/responses/404"
+  /articles: 
+    get:
+      tags:
+        - Artikel verwalten
+      summary: "Eine Liste aller angelegten Artikel. Wenn keine Artikel angelegt sind, wird null zurück gegeben."
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ArticleID"
+    put:
+      tags:
+        - "Artikel verwalten"
+      summary: Anlegen eines neuen Artikels.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Article"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ArticleID"
+        "400":
+          $ref: "#/components/responses/400"
+        "409":
+          $ref: "#/components/responses/409Article"
+  /articles/{id}:
+    patch:
+      tags:
+        - "Artikel verwalten"
+      summary: Änderungen eines Artikels oder seiner Einheit.
+      parameters:
+        - name: id
+          in: path
+          description: Die Id des zu ändernden Artikels
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: "#/components/schemas/Article"
+      responses:
+        "204":
+          $ref: "#/components/responses/204"
+        "400":
+          $ref:  "#/components/responses/400"
+        "404":
+          $ref:  "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409Article"
+    delete:
+      tags:
+        - "Artikel verwalten"
+      summary: Löschen eines Artikels.
+      parameters:
+        - name: id
+          in: path
+          description: Die Id des zu löschenden Artikels
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "204":
+          $ref: "#/components/responses/204"
+        "400":
+          $ref:  "#/components/responses/400"
+        "404":
+          $ref:  "#/components/responses/404"
 
 components:
   schemas:
@@ -219,6 +301,22 @@ components:
             id:
               type: integer
         - $ref: "#/components/schemas/Unit"
+    Article:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Mehl
+        unit:
+          type: integer
+          example: 1
+    ArticleID:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+        - $ref: "#/components/schemas/Article"
   responses:
     "204":
       description: No Content - Es gibt keinen Inhalt, den man für diese Anfrage senden kann, aber die Kopfzeilen können nützlich sein.
@@ -226,3 +324,5 @@ components:
       description: Bad Request - Diese Antwort bedeutet, dass der Server die Anfrage aufgrund einer ungültigen Syntax nicht verstehen konnte.
     "404":
       description: Not Found - Der Server kann die angeforderte Ressource nicht finden.
+    "409Article":
+      description: Conflict - Der Artikel verwendet eine Einheit, die nicht bekannt ist.

@@ -19,6 +19,10 @@ func createTables() {
 	if err != nil {
 		log.Panic(err)
 	}
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS articles (name TEXT, unit INTEGER);")
+	if err != nil {
+		log.Panic(err)
+	}
 }
 
 func dbBoxesPUT(box Box) (id int64) {
@@ -123,6 +127,63 @@ func dbUnitsPATCH(id int64, unit Unit) int {
 
 func dbUnitsDELETE(id int64) int {
 	res, err := db.Exec("DELETE FROM units WHERE rowid = ?", id)
+	cnt, _ := res.RowsAffected()
+	switch {
+	case err != nil:
+		return http.StatusBadRequest
+	case cnt == 0:
+		return http.StatusNotFound
+	case cnt == 1:
+		return http.StatusNoContent
+	}
+	return http.StatusBadRequest
+}
+
+func dbArticlesPUT(article Article) (id int64) {
+	result, err := db.Exec("INSERT INTO articles (name, unit) VALUES (?, ?);", article.Name, article.UnitID)
+	if err != nil {
+		log.Fatalf("Error in INSERT INTO articles: %v", err)
+	}
+	id, _ = result.LastInsertId()
+	return
+}
+
+func dbArticlesGET() (articles Articles) {
+	article := make(Articles, 1)
+	queryStmt := "SELECT rowid, name, unit FROM articles;"
+	rows, err := db.Query(queryStmt)
+	if err != nil {
+		log.Fatalf("Error in Query: %v", err)
+	}
+
+	for rows.Next() {
+		err = rows.Scan(&article[0].ID, &article[0].Name, &article[0].UnitID)
+		if err != nil {
+			log.Fatalf("Error in Scanning Rows:")
+		}
+		articles = append(articles, article[0])
+	}
+	return articles
+}
+
+func dbArticlesPATCH(id int64, article Article) int {
+	if article.Name != "" {
+		res, err := db.Exec("UPDATE articles SET name = ?, unit = ? WHERE rowid = ?", article.Name, article.UnitID, id)
+		cnt, _ := res.RowsAffected()
+		switch {
+		case err != nil:
+			return http.StatusBadRequest
+		case cnt == 0:
+			return http.StatusNotFound
+		case cnt == 1:
+			return http.StatusNoContent
+		}
+	}
+	return http.StatusBadRequest
+}
+
+func dbArticlesDELETE(id int64) int { //ToDo Refactor: alle DELETE-funcs könnten zusammen gelegt werden
+	res, err := db.Exec("DELETE FROM articles WHERE rowid = ?", id)
 	cnt, _ := res.RowsAffected()
 	switch {
 	case err != nil:

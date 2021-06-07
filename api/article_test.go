@@ -1,15 +1,17 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 )
 
-func TestPUTUnits(t *testing.T) {
+func Test_articlesPUT(t *testing.T) {
 	setupDB()
 	router := SetupRouter()
+	unit := dbUnitsPUT(Unit{"u", "Unit"})
 
 	tests := []struct {
 		name   string
@@ -19,8 +21,10 @@ func TestPUTUnits(t *testing.T) {
 		res    string
 		status int
 	}{
-		{"PUT", "PUT", "/api/units", `{"unit": "Unit1","long": "Long1"}`, `{"id":1,"long":"Long1","unit":"Unit1"}`, 201},
-		{"PUT ohne Unit", "PUT", "/api/units", `{"long": "Long"}`, `Unit fehlt`, 400},
+		{"PUT", "PUT", "/api/articles", `{"name": "Name","unit": ` + fmt.Sprint(unit) + `}`, `{"id":1,"name":"Name","unit":` + fmt.Sprint(unit) + `}`, 201},
+		{"PUT ohne Body", "PUT", "/api/articles", `{}`, `Artikel fehlt`, 400},
+		{"PUT ohne Einheit", "PUT", "/api/articles", `{"name": "Name"}`, `Unbekannte Einheit`, 400},
+		{"PUT falsche Einheit", "PUT", "/api/articles", `{"name": "Name","unit": 2}`, `Unbekannte Einheit`, 400},
 	}
 	for _, tt := range tests {
 
@@ -42,9 +46,10 @@ func TestPUTUnits(t *testing.T) {
 	teardownDB()
 }
 
-func TestGETUnits(t *testing.T) {
+func Test_articlesGET(t *testing.T) {
 	setupDB()
 	router := SetupRouter()
+	dbUnitsPUT(Unit{"kg", "Kilogramm"})
 
 	tests := []struct {
 		name   string
@@ -54,9 +59,9 @@ func TestGETUnits(t *testing.T) {
 		res    string
 		status int
 	}{
-		{"GET leere Liste", "GET", "/api/units", "", "null", 200},
-		{"GET eine Box", "GET", "/api/units", "", `[{"id":1,"unit":"unit","long":"long"}]`, 200},
-		{"GET zwei Boxen", "GET", "/api/units", "", `[{"id":1,"unit":"unit","long":"long"},{"id":2,"unit":"unit","long":"long"}]`, 200},
+		{"GET leere Liste", "GET", "/api/articles", "", "null", 200},
+		{"GET ein Artikel", "GET", "/api/articles", "", `[{"id":1,"name":"name","unit":1}]`, 200},
+		{"GET zwei Artikel", "GET", "/api/articles", "", `[{"id":1,"name":"name","unit":1},{"id":2,"name":"name","unit":1}]`, 200},
 	}
 	for _, tt := range tests {
 
@@ -72,14 +77,15 @@ func TestGETUnits(t *testing.T) {
 			if tt.res != w.Body.String() {
 				t.Errorf("%v auf %v ist: %v, soll %v", tt.verb, tt.route, w.Body.String(), tt.res)
 			}
-			dbUnitsPUT(Unit{"unit", "long"})
+			dbArticlesPUT(Article{"name", 1})
 		})
 	}
 }
 
-func TestPATCHUnits(t *testing.T) {
+func TestArticlesPatch(t *testing.T) {
 	setupDB()
 	router := SetupRouter()
+	dbUnitsPUT(Unit{"kg", "Kilogramm"})
 
 	tests := []struct {
 		name   string
@@ -89,11 +95,10 @@ func TestPATCHUnits(t *testing.T) {
 		res    string
 		status int
 	}{
-		{"PATCH leere Liste", "PATCH", "/api/units/1", `{"unit": "Box1","long": "Notiz1"}`, "", 404},
-		{"PATCH ID 1", "PATCH", "/api/units/1", `{"unit": "Patch1","long": "Patch1"}`, "", 204},
-		{"PATCH ID ohne Einheit", "PATCH", "/api/units/1", `{"unit": "","long": "Patch1"}`, "", 400},
-		{"PATCH mit ungültiger ID", "PATCH", "/api/units/invalid", `{"unit": "Patch1","long": "Patch1"}`, "", 400},
-		{"PATCH falscher ID", "PATCH", "/api/units/20", `{"unit": "Patch1","long": "Patch1"}`, "", 404},
+		{"PATCH leere Liste", "PATCH", "/api/articles/1", `{"name": "Neu","unit": 1}`, "", 404},
+		{"PATCH ok", "PATCH", "/api/articles/1", `{"name": "Neu","unit": 1}`, "", 204},
+		{"PATCH ohne namen", "PATCH", "/api/articles/1", `{"unit": 1}`, "", 400},
+		{"PATCH ohne Einheit", "PATCH", "/api/articles/1", `{"name": "Neu"}`, "", 409},
 	}
 	for _, tt := range tests {
 
@@ -109,16 +114,17 @@ func TestPATCHUnits(t *testing.T) {
 			if tt.res != w.Body.String() {
 				t.Errorf("%v auf %v ist: %v, soll %v", tt.verb, tt.route, w.Body.String(), tt.res)
 			}
-			dbUnitsPUT(Unit{"name", "notiz"})
+			dbArticlesPUT(Article{"name", 1})
 		})
 	}
 
 	teardownDB()
 }
 
-func TestDELETEUnits(t *testing.T) {
+func Test_articlesDELETE(t *testing.T) {
 	setupDB()
 	router := SetupRouter()
+	dbUnitsPUT(Unit{"kg", "Kilogramm"})
 
 	tests := []struct {
 		name   string
@@ -128,10 +134,10 @@ func TestDELETEUnits(t *testing.T) {
 		res    string
 		status int
 	}{
-		{"DELETE leere Liste", "DELETE", "/api/units/1", ``, "", 404},
-		{"DELETE ID 1", "DELETE", "/api/units/1", ``, "", 204},
-		{"DELETE mit ungültiger ID", "DELETE", "/api/units/invalid", ``, "", 400},
-		{"DELETE falscher ID", "DELETE", "/api/units/20", ``, "", 404},
+		{"DELETE leere Liste", "DELETE", "/api/articles/1", ``, "", 404},
+		{"DELETE ID 1", "DELETE", "/api/articles/1", ``, "", 204},
+		{"DELETE mit ungültiger ID", "DELETE", "/api/articles/invalid", ``, "", 400},
+		{"DELETE falscher ID", "DELETE", "/api/articles/20", ``, "", 404},
 	}
 	for _, tt := range tests {
 
@@ -147,31 +153,9 @@ func TestDELETEUnits(t *testing.T) {
 			if tt.res != w.Body.String() {
 				t.Errorf("%v auf %v ist: %v, soll %v", tt.verb, tt.route, w.Body.String(), tt.res)
 			}
-			dbUnitsPUT(Unit{"name", "notiz"})
+			dbArticlesPUT(Article{"name", 1})
 		})
 	}
 
 	teardownDB()
-}
-
-func TestUnits_contains(t *testing.T) {
-	type args struct {
-		id int64
-	}
-	tests := []struct {
-		name string
-		u    Units
-		args args
-		want bool
-	}{
-		{"Einfaches true", Units{{1,"kg", "Kilogramm"}},args{1},true},
-		{"Einfaches false", Units{{1,"kg", "Kilogramm"}},args{2},false},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.u.contains(tt.args.id); got != tt.want {
-				t.Errorf("Units.contains() = %v, want %v", got, tt.want)
-			}
-		})
-	}
 }

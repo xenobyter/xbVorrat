@@ -159,7 +159,7 @@ func Test_dbUnitsPUT(t *testing.T) {
 		wantId int64
 	}{
 		{"Erste Einheit erstellen", Unit{"Box2", "Notiz2"}, 1},
-		{"Zweite Einheit erstellen", Unit{"Box3", "Notiz3"},2},
+		{"Zweite Einheit erstellen", Unit{"Box3", "Notiz3"}, 2},
 	}
 	for _, tt := range tests {
 		log.Println(tt.name)
@@ -200,7 +200,7 @@ func Test_dbUnitsPATCH(t *testing.T) {
 	setupDB()
 
 	type args struct {
-		id  int64
+		id   int64
 		unit Unit
 	}
 	tests := []struct {
@@ -208,7 +208,7 @@ func Test_dbUnitsPATCH(t *testing.T) {
 		args       args
 		wantStatus int
 		wantUnit   string
-		wantLong  string
+		wantLong   string
 	}{
 		{"PATCH bei leerer DB", args{10, Unit{"neu", ""}}, http.StatusNotFound, "", ""},
 		{"PATCH falsche ID", args{0, Unit{"neu", ""}}, http.StatusNotFound, "", ""},
@@ -265,6 +265,113 @@ func Test_dbUnitsDELETE(t *testing.T) {
 			}
 		})
 		dbUnitsPUT(Unit{"name", "notiz"})
+	}
+
+	teardownDB()
+}
+
+func Test_dbArticlesPUT(t *testing.T) {
+	setupDB()
+
+	tests := []struct {
+		name    string
+		article Article
+		wantId  int64
+	}{
+		{"Ersten Artikel anlegen", Article{"article", 1}, 1},
+		{"Zweiten Artikel anlegen", Article{"article", 1}, 2},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotId := dbArticlesPUT(tt.article); gotId != tt.wantId {
+				t.Errorf("dbArticlesPUT() = %v, want %v", gotId, tt.wantId)
+			}
+		})
+	}
+
+	teardownDB()
+}
+
+func Test_dbArticlesGET(t *testing.T) {
+	setupDB()
+
+	tests := []struct {
+		name         string
+		wantArticles Articles
+	}{
+		{"Leere Liste", nil},
+		{"Ein Artikel", Articles{{1, "name", 1}}},
+		{"Zwei Artikel", Articles{{1, "name", 1}, {2, "name", 1}}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotArticles := dbArticlesGET(); !reflect.DeepEqual(gotArticles, tt.wantArticles) {
+				t.Errorf("dbArticlesGET() = %v, want %v", gotArticles, tt.wantArticles)
+			}
+		})
+		dbArticlesPUT(Article{"name", 1})
+	}
+
+	teardownDB()
+}
+
+func Test_dbArticlesPATCH(t *testing.T) {
+	setupDB()
+
+	type args struct {
+		id      int64
+		article Article
+	}
+	tests := []struct {
+		name         string
+		args         args
+		wantArticles Articles
+		wantStatus   int
+	}{
+		{"PATCH bei leerer DB", args{0, Article{"name", 1}}, nil, http.StatusNotFound},
+		{"PATCH korrekter Artikel", args{1, Article{"neu", 1}}, Articles{{1, "neu", 1}}, http.StatusNoContent},
+		{"PATCH falsche ID", args{10, Article{"neu", 1}}, Articles{{1, "neu", 1}, {2, "name", 1}}, http.StatusNotFound},
+		{"PATCH ohne Name", args{1, Article{"", 1}}, Articles{{1, "neu", 1}, {2, "name", 1}, {3, "name", 1}}, http.StatusBadRequest},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotStatus := dbArticlesPATCH(tt.args.id, tt.args.article); gotStatus != tt.wantStatus {
+				t.Errorf("dbArticlesPATCH() = %v, want %v", gotStatus, tt.wantStatus)
+			}
+			if gotArticles := dbArticlesGET(); !reflect.DeepEqual(gotArticles, tt.wantArticles) {
+				t.Errorf("dbArticlesPATCH() = %v, want %v", gotArticles, tt.wantArticles)
+			}
+		})
+		dbArticlesPUT(Article{"name", 1})
+	}
+
+	teardownDB()
+}
+
+func Test_dbArticlesDELETE(t *testing.T) {
+	setupDB()
+	
+	tests := []struct {
+		name         string
+		id           int64
+		wantStatus   int
+		wantArticles Articles
+	}{
+		{"DELETE bei leerer DB", 1, http.StatusNotFound, nil},
+		{"DELETE korrekter Artikel", 1, http.StatusNoContent, nil},
+		{"DELETE falscher Artikel", 10, http.StatusNotFound, Articles{{1, "name", 1}}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotStatus := dbArticlesDELETE(tt.id); gotStatus != tt.wantStatus {
+				t.Errorf("dbArticlesDELETE() = %v, want %v", gotStatus, tt.wantStatus)
+			}
+			if gotArticles := dbArticlesGET(); !reflect.DeepEqual(gotArticles, tt.wantArticles) {
+				t.Errorf("dbArticlesDELETE() = %v, want %v", gotArticles, tt.wantArticles)
+			}
+		})
+		dbArticlesPUT(Article{"name", 1})
 	}
 
 	teardownDB()

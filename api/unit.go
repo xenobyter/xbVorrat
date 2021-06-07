@@ -9,14 +9,23 @@ import (
 )
 
 type Unit struct {
-	Unit  string `json:"unit"`
+	Unit string `json:"unit"`
 	Long string `json:"long"`
 }
 
 type Units []struct {
-	ID    int64  `json:"id"`
-	Unit  string `json:"unit"`
+	ID   int64  `json:"id"`
+	Unit string `json:"unit"`
 	Long string `json:"long"`
+}
+
+func (u Units) contains(id int64) bool {
+	for _, n := range u {
+		if id == n.ID {
+			return true
+		}
+	}
+	return false
 }
 
 func unitsPUT(c *gin.Context) {
@@ -31,8 +40,8 @@ func unitsPUT(c *gin.Context) {
 	} else {
 		id := dbUnitsPUT(unit)
 		c.JSON(http.StatusCreated, gin.H{
-			"id":    id,
-			"unit":  unit.Unit,
+			"id":   id,
+			"unit": unit.Unit,
 			"long": unit.Long,
 		})
 	}
@@ -58,7 +67,7 @@ func unitsPATCH(c *gin.Context) {
 	}
 }
 
-func unitsDELETE(c *gin.Context) {
+func unitsDELETE(c *gin.Context) { //TODO: Einheiten nur löschen, wenn sie nicht benutzt werden
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
 		c.Status(http.StatusBadRequest)

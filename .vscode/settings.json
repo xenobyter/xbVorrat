@@ -1,3 +1,7 @@
 {
-    "browser-preview.startUrl": "http://localhost:8080"
+    "browser-preview.startUrl": "http://localhost:8080",
+    "cSpell.words": [
+        "gonic",
+        "rowid"
+    ]
 }
