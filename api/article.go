@@ -1,7 +1,6 @@
 package api
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -32,7 +31,7 @@ func articlesPUT(c *gin.Context) {
 	var article Article
 	err := c.BindJSON(&article)
 	if err != nil {
-		log.Fatalf("articlesPUT BindJSON: %v", err)
+		c.Status(http.StatusBadRequest)
 	}
 
 	units := dbUnitsGET()
@@ -61,8 +60,7 @@ func articlesPATCH(c *gin.Context) {
 	var article Article
 	err := c.BindJSON(&article)
 	if err != nil {
-		log.Fatalf("articlesPATCH BindJSON: %v", err)
-		//TODO: Mit HTTP4xx antworten, wenn BindJSON fehlschlägt
+		c.Status((http.StatusBadRequest))
 	}
 	units := dbUnitsGET()
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)

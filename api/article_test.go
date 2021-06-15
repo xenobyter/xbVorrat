@@ -25,6 +25,7 @@ func Test_articlesPUT(t *testing.T) {
 		{"PUT ohne Body", "PUT", "/api/articles", `{}`, `Artikel fehlt`, 400},
 		{"PUT ohne Einheit", "PUT", "/api/articles", `{"name": "Name"}`, `Unbekannte Einheit`, 400},
 		{"PUT falsche Einheit", "PUT", "/api/articles", `{"name": "Name","unit": 2}`, `Unbekannte Einheit`, 400},
+		{"PUT mit Einheit als String", "PUT", "/api/articles", `{"name": "Name","unit": "2"}`, `Unbekannte Einheit`, 400},
 	}
 	for _, tt := range tests {
 
@@ -99,6 +100,7 @@ func TestArticlesPatch(t *testing.T) {
 		{"PATCH ok", "PATCH", "/api/articles/1", `{"name": "Neu","unit": 1}`, "", 204},
 		{"PATCH ohne namen", "PATCH", "/api/articles/1", `{"unit": 1}`, "", 400},
 		{"PATCH ohne Einheit", "PATCH", "/api/articles/1", `{"name": "Neu"}`, "", 409},
+		{"PATCH mit Einheit als string", "PATCH", "/api/articles/1", `{"name": "Neu","unit":"1"}`, "", 400},
 	}
 	for _, tt := range tests {
 
@@ -170,8 +172,8 @@ func TestArticles_contains(t *testing.T) {
 		args args
 		want bool
 	}{
-		{"Einfaches true",Articles{{3,"name",1}},args{1},true},
-		{"Einfaches false",Articles{{3,"name",1}},args{2},false},
+		{"Einfaches true", Articles{{3, "name", 1}}, args{1}, true},
+		{"Einfaches false", Articles{{3, "name", 1}}, args{2}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
