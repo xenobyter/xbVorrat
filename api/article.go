@@ -62,6 +62,7 @@ func articlesPATCH(c *gin.Context) {
 	err := c.BindJSON(&article)
 	if err != nil {
 		log.Fatalf("articlesPATCH BindJSON: %v", err)
+		//TODO: Mit HTTP4xx antworten, wenn BindJSON fehlschlägt
 	}
 	units := dbUnitsGET()
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)

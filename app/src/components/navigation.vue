@@ -11,6 +11,7 @@
     <a v-on:click="show('')">Start</a>
     <a v-on:click="show('boxlist')">Boxen</a>
     <a v-on:click="show('unitlist')">Einheiten</a>
+    <a v-on:click="show('articlelist')">Artikel</a>
   </div>
 </template>
 

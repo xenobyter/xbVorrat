@@ -2,6 +2,7 @@
   <navigation v-on:nav="showNav" />
   <boxlist v-if="show=='boxlist'" />
   <unitlist v-if="show=='unitlist'" />
+  <articlelist v-if="show=='articlelist'" />
   <information />
 </template>
 
@@ -9,6 +10,7 @@
 import navigation from "./components/navigation.vue";
 import boxlist from "./components/boxlist.vue";
 import unitlist from "./components/unitlist";
+import articlelist from "./components/articlelist";
 import information from "./components/information.vue";
 
 export default {
@@ -17,11 +19,12 @@ export default {
     navigation,
     boxlist,
     unitlist,
+    articlelist,
     information,
   },
   data() {
     return {
-      show: "",
+      show: "articlelist",
     };
   },
   methods: {

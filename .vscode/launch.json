@@ -17,7 +17,15 @@
       "type": "browser-preview",
       "request": "launch",
       "name": "Browser Preview: Launch",
-      "url": "http://localhost:8080"
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}/app"
     },
+    {
+      "type": "pwa-chrome",
+      "request": "launch",
+      "name": "Launch Chrome against localhost",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}/app"
+  },
   ]
 }
