@@ -370,7 +370,7 @@ func Test_dbArticlesDELETE(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if gotStatus :=dbDeleteByID(tt.args.table,tt.args.id); gotStatus != tt.wantStatus {
+			if gotStatus := dbDeleteByID(tt.args.table, tt.args.id); gotStatus != tt.wantStatus {
 				t.Errorf("dbArticlesDELETE() = %v, want %v", gotStatus, tt.wantStatus)
 			}
 			if gotArticles := dbArticlesGET(); !reflect.DeepEqual(gotArticles, tt.wantArticles) {
@@ -378,6 +378,84 @@ func Test_dbArticlesDELETE(t *testing.T) {
 			}
 		})
 		dbArticlesPUT(Article{"name", 1})
+	}
+
+	teardownDB()
+}
+
+func Test_dbStocksPUT(t *testing.T) {
+	setupDB()
+
+	tests := []struct {
+		name   string
+		stock  Stock
+		wantId int64
+	}{
+		{"Ersten Artikel anlegen", Stock{1, 1, 0.5, 2, "31.12.2021"}, 1},
+		{"Zweiten Artikel anlegen", Stock{1, 1, 0.5, 2, "31.12.2021"}, 2},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotId := dbStocksPUT(tt.stock); gotId != tt.wantId {
+				t.Errorf("dbStocksPUT() = %v, want %v", gotId, tt.wantId)
+			}
+		})
+	}
+
+	teardownDB()
+}
+
+func Test_dbStocksGET(t *testing.T) {
+	setupDB()
+
+	tests := []struct {
+		name       string
+		wantStocks Stocks
+	}{
+		{"Leere Liste", nil},
+		{"Ein Artikel", Stocks{{1, 1, 1, 0.5, 2, "31.12.2021"}}},
+		{"Zwei Artikel", Stocks{{1, 1, 1, 0.5, 2, "31.12.2021"}, {2, 1, 1, 0.5, 2, "31.12.2021"}}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotStocks := dbStocksGET(); !reflect.DeepEqual(gotStocks, tt.wantStocks) {
+				t.Errorf("dbArticlesGET() = %v, want %v", gotStocks, tt.wantStocks)
+			}
+		})
+		dbStocksPUT(Stock{1, 1, 0.5, 2, "31.12.2021"})
+	}
+
+	teardownDB()
+}
+
+func Test_dbStocksPATCH(t *testing.T) {
+	setupDB()
+
+	type args struct {
+		id    int64
+		stock Stock
+	}
+	tests := []struct {
+		name       string
+		args       args
+		wantStocks Stocks
+		wantStatus int
+	}{
+		{"PATCH bei leerer DB", args{0, Stock{1, 1, 0.5, 2, "31.12.2021"}}, nil, http.StatusNotFound},
+		{"PATCH korrekter Artikel", args{1, Stock{1, 1, 0.5, 2, "31.12.2000"}}, Stocks{{1, 1, 1, 0.5, 2, "31.12.2000"}}, http.StatusNoContent},
+		{"PATCH falsche ID", args{10, Stock{1, 1, 0.5, 2, "31.12.2021"}}, Stocks{{1, 1, 1, 0.5, 2, "31.12.2000"}, {2, 1, 1, 0.5, 2, "31.12.2021"}}, http.StatusNotFound},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotStatus := dbStocksPATCH(tt.args.id, tt.args.stock); gotStatus != tt.wantStatus {
+				t.Errorf("dbStocksPATCH() = %v, want %v", gotStatus, tt.wantStatus)
+			}
+			if gotStocks := dbStocksGET(); !reflect.DeepEqual(gotStocks, tt.wantStocks) {
+				t.Errorf("dbStocksPATCH() = %v, want %v", gotStocks, tt.wantStocks)
+			}
+		})
+		dbStocksPUT(Stock{1, 1, 0.5, 2, "31.12.2021"})
 	}
 
 	teardownDB()

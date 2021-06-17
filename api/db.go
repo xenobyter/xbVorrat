@@ -24,6 +24,10 @@ func createTables() {
 	if err != nil {
 		log.Panic(err)
 	}
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS stocks (article INTEGER, box INTEGER, size REAL, quantity INTEGER, expiry TEXT );")
+	if err != nil {
+		log.Panic(err)
+	}
 }
 
 func dbBoxesPUT(box Box) (id int64) {
@@ -156,7 +160,7 @@ func dbArticlesPATCH(id int64, article Article) int {
 }
 
 func dbDeleteByID(table string, id int64) int {
-	sql:=fmt.Sprint("DELETE FROM ", table, " WHERE rowid = ?")
+	sql := fmt.Sprint("DELETE FROM ", table, " WHERE rowid = ?")
 	res, err := db.Exec(sql, id)
 	if err != nil {
 		log.Fatal(err)
@@ -167,4 +171,47 @@ func dbDeleteByID(table string, id int64) int {
 	}
 	return http.StatusNoContent
 
+}
+
+func dbStocksPUT(stock Stock) (id int64) {
+	result, err := db.Exec("INSERT INTO stocks (article, box, size, quantity, expiry) VALUES (?, ?, ?, ?, ?);", stock.Article, stock.Box, stock.Size, stock.Quantity, stock.Expiry)
+	if err != nil {
+		log.Fatalf("Error in INSERT INTO stocks: %v", err)
+	}
+	id, _ = result.LastInsertId()
+	return
+}
+
+func dbStocksGET() (stocks Stocks) {
+	stock := make(Stocks, 1)
+	queryStmt := "SELECT rowid, article, box, size, quantity, expiry FROM stocks;"
+	rows, err := db.Query(queryStmt)
+	if err != nil {
+		log.Fatalf("Error in Query: %v", err)
+	}
+
+	for rows.Next() {
+		err = rows.Scan(&stock[0].ID, &stock[0].Article, &stock[0].Box, &stock[0].Size, &stock[0].Quantity, &stock[0].Expiry)
+		if err != nil {
+			log.Fatalf("Error in Scanning Rows:")
+		}
+		stocks = append(stocks, stock[0])
+	}
+	return stocks
+}
+
+func dbStocksPATCH(id int64, stock Stock) int {
+	if stock.Expiry != "" {
+		res, err := db.Exec("UPDATE stocks SET article = ?, box = ?, size = ?, quantity = ?, expiry = ? WHERE rowid = ?", stock.Article, stock.Box, stock.Size, stock.Quantity, stock.Expiry, id)
+		cnt, _ := res.RowsAffected()
+		switch {
+		case err != nil:
+			return http.StatusBadRequest
+		case cnt == 0:
+			return http.StatusNotFound
+		case cnt == 1:
+			return http.StatusNoContent
+		}
+	}
+	return http.StatusBadRequest
 }

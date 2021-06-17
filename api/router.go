@@ -25,6 +25,11 @@ func SetupRouter() *gin.Engine {
 	router.PUT("/api/articles", articlesPUT)
 	router.PATCH("/api/articles/:id", articlesPATCH)
 	router.DELETE("/api/articles/:id", articlesDELETE)
+	
+	router.GET("/api/stocks", stocksGET)
+	router.PUT("/api/stocks", stocksPUT)
+	router.PATCH("/api/stocks/:id", stocksPATCH)
+	router.DELETE("/api/stocks/:id", stocksDELETE)
 
 	return router
 }

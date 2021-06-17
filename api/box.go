@@ -19,6 +19,15 @@ type Boxes []struct {
 	Notiz string `json:"notiz"`
 }
 
+func (b Boxes) contains(id int64) bool {
+	for _, n := range b {
+		if id == n.ID {
+			return true
+		}
+	}
+	return false
+}
+
 func boxesPUT(c *gin.Context) {
 	var box Box
 	err := c.BindJSON(&box)

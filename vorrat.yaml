@@ -264,7 +264,88 @@ paths:
           $ref:  "#/components/responses/400"
         "404":
           $ref:  "#/components/responses/404"
-
+  /stocks:
+    get:
+      tags:
+        - Vorräte verwalten
+      summary: "Eine Liste aller angelegten Vorräte. Wenn keine Vorräte angelegt sind, wird null zurück gegeben."
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StockID"
+    put:
+      tags:
+        - "Vorräte verwalten"
+      summary: Anlegen eines neuen Vorrats.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Stock"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StockID"
+        "400":
+          $ref: "#/components/responses/400"
+        "409":
+          $ref: "#/components/responses/409Stock"
+  /stocks/{id}: 
+    patch:
+      tags:
+        - "Vorräte verwalten"
+      summary: Änderungen eines Vorratseintrags.
+      parameters:
+        - name: id
+          in: path
+          description: Die Id des zu ändernden Vorrats
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: "#/components/schemas/Stock"
+      responses:
+        "204":
+          $ref: "#/components/responses/204"
+        "400":
+          $ref:  "#/components/responses/400"
+        "404":
+          $ref:  "#/components/responses/404"
+        "409":
+          $ref: "#/components/responses/409Stock"
+    delete:
+      tags:
+        - "Vorräte verwalten"
+      summary: Löschen eines Vorrats.
+      parameters:
+        - name: id
+          in: path
+          description: Die Id des zu löschenden Vorrats
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "204":
+          $ref: "#/components/responses/204"
+        "400":
+          $ref:  "#/components/responses/400"
+        "404":
+          $ref:  "#/components/responses/404"       
 components:
   schemas:
     Box:
@@ -317,6 +398,33 @@ components:
             id:
               type: integer
         - $ref: "#/components/schemas/Article"
+    Stock:
+      type: object
+      properties:
+        article:
+          type: integer
+          example: 1
+        box:
+          type: integer
+          example: 1
+        size:
+          type: number
+          example: 0.5
+        quantity:
+          type: integer
+          example: 2
+        expiry:
+          type: string 
+          format: date
+          example: "31.12.2021"
+    StockID:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+        -  $ref: "#/components/schemas/Stock"
   responses:
     "204":
       description: No Content - Es gibt keinen Inhalt, den man für diese Anfrage senden kann, aber die Kopfzeilen können nützlich sein.
@@ -326,3 +434,5 @@ components:
       description: Not Found - Der Server kann die angeforderte Ressource nicht finden.
     "409Article":
       description: Conflict - Der Artikel verwendet eine Einheit, die nicht bekannt ist.
+    "409Stock":
+      description: Conflict - Der Vorratseintrag verwendet eine unbekannte Einheit, Box oder Artikel.
