@@ -460,3 +460,31 @@ func Test_dbStocksPATCH(t *testing.T) {
 
 	teardownDB()
 }
+
+func Test_dbStocksRichGET(t *testing.T) {
+	setupDB()
+	dbBoxesPUT(Box{"Box1", ""})
+	dbBoxesPUT(Box{"Box2", ""})
+	dbArticlesPUT(Article{"Artikel1", 1})
+	dbArticlesPUT(Article{"Artikel2", 2})
+	dbUnitsPUT(Unit{"u1", ""})
+	dbUnitsPUT(Unit{"u2", ""})
+	dbStocksPUT(Stock{1, 1, 0.5, 2, "31.12.2021"})
+	dbStocksPUT(Stock{2, 2, 0.5, 2, "31.12.2021"})
+
+	tests := []struct {
+		name       string
+		wantStocks StocksRich
+	}{
+		{"Zwei Artikel", StocksRich{{1, 1, 1, 0.5, 2, "31.12.2021", "Artikel1", "Box1", "u1"}, {2, 2, 2, 0.5, 2, "31.12.2021", "Artikel2", "Box2", "u2"}}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotStocks := dbStocksRichGET(); !reflect.DeepEqual(gotStocks, tt.wantStocks) {
+				t.Errorf("dbStocksRichGET() = %v, want %v", gotStocks, tt.wantStocks)
+			}
+		})
+	}
+
+	teardownDB()
+}

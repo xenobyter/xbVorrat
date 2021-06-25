@@ -199,6 +199,23 @@ func dbStocksGET() (stocks Stocks) {
 	}
 	return stocks
 }
+func dbStocksRichGET() (stocks StocksRich) {
+	stock := make(StocksRich, 1)
+	queryStmt := "SELECT stocks.rowid, article, articles.name, box, boxes.name, size, units.unit, quantity, expiry from stocks INNER JOIN articles on articles.rowid = stocks.article INNER JOIN boxes on boxes.rowid = stocks.box INNER JOIN units on units.rowid = articles.unit;"
+	rows, err := db.Query(queryStmt)
+	if err != nil {
+		log.Fatalf("Error in Query: %v", err)
+	}
+
+	for rows.Next() {
+		err = rows.Scan(&stock[0].ID, &stock[0].Article, &stock[0].ArticleName, &stock[0].Box, &stock[0].BoxName, &stock[0].Size, &stock[0].Unit, &stock[0].Quantity, &stock[0].Expiry)
+		if err != nil {
+			log.Fatalf("Error in Scanning Rows:")
+		}
+		stocks = append(stocks, stock[0])
+	}
+	return stocks
+}
 
 func dbStocksPATCH(id int64, stock Stock) int {
 	if stock.Expiry != "" {

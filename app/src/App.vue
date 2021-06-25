@@ -1,9 +1,10 @@
 <template >
   <navigation v-on:nav="showNav" />
-  <boxlist v-if="show=='boxlist'" />
-  <unitlist v-if="show=='unitlist'" />
-  <articlelist v-if="show=='articlelist'" />
-  <information />
+  <boxlist v-if="show == 'boxlist'" />
+  <unitlist v-if="show == 'unitlist'" />
+  <articlelist v-if="show == 'articlelist'" />
+  <information v-if="show == 'information'"/>
+  <mainview v-if="show == ''"/>
 </template>
 
 <script>
@@ -12,6 +13,7 @@ import boxlist from "./components/boxlist.vue";
 import unitlist from "./components/unitlist";
 import articlelist from "./components/articlelist";
 import information from "./components/information.vue";
+import mainview from "./components/mainview.vue";
 
 export default {
   name: "App",
@@ -21,10 +23,11 @@ export default {
     unitlist,
     articlelist,
     information,
+    mainview,
   },
   data() {
     return {
-      show: "articlelist",
+      show: "",
     };
   },
   methods: {

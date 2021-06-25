@@ -25,6 +25,18 @@ type Stocks []struct {
 	Expiry   string  `json:"expiry"`
 }
 
+type StocksRich []struct {
+	ID          int64   `json:"id"`
+	Article     int64   `json:"article"`
+	Box         int64   `json:"box"`
+	Size        float64 `json:"size"`
+	Quantity    int64   `json:"quantity"`
+	Expiry      string  `json:"expiry"`
+	ArticleName string  `json:"articlestr"`
+	BoxName     string  `json:"boxstr"`
+	Unit        string  `json:"unitstr"`
+}
+
 func stocksPUT(c *gin.Context) {
 	articles := dbArticlesGET()
 	boxes := dbBoxesGET()
@@ -56,7 +68,7 @@ func stocksPUT(c *gin.Context) {
 	}
 }
 
-func expiryDateCheck(stock Stock) error { 
+func expiryDateCheck(stock Stock) error {
 	layout := "02.01.2006"
 	_, datErr := time.Parse(layout, stock.Expiry)
 	return datErr
@@ -64,6 +76,11 @@ func expiryDateCheck(stock Stock) error {
 
 func stocksGET(c *gin.Context) {
 	res := dbStocksGET()
+	c.JSON(http.StatusOK, res)
+}
+
+func stocksRichGET(c *gin.Context) {
+	res := dbStocksRichGET()
 	c.JSON(http.StatusOK, res)
 }
 

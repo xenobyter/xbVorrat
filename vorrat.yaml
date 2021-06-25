@@ -76,15 +76,15 @@ paths:
         required: true
         content:
           application/json:
-            schema: 
+            schema:
               $ref: "#/components/schemas/Box"
       responses:
         "204":
           $ref: "#/components/responses/204"
         "400":
-          $ref:  "#/components/responses/400"
+          $ref: "#/components/responses/400"
         "404":
-          $ref:  "#/components/responses/404"
+          $ref: "#/components/responses/404"
     delete:
       tags:
         - "Boxen verwalten"
@@ -101,9 +101,9 @@ paths:
         "204":
           $ref: "#/components/responses/204"
         "400":
-          $ref:  "#/components/responses/400"
+          $ref: "#/components/responses/400"
         "404":
-          $ref:  "#/components/responses/404"
+          $ref: "#/components/responses/404"
   /units:
     get:
       tags:
@@ -154,15 +154,15 @@ paths:
         required: true
         content:
           application/json:
-            schema: 
+            schema:
               $ref: "#/components/schemas/Unit"
       responses:
         "204":
           $ref: "#/components/responses/204"
         "400":
-          $ref:  "#/components/responses/400"
+          $ref: "#/components/responses/400"
         "404":
-          $ref:  "#/components/responses/404"
+          $ref: "#/components/responses/404"
     delete:
       tags:
         - "Einheiten verwalten"
@@ -179,10 +179,10 @@ paths:
         "204":
           $ref: "#/components/responses/204"
         "400":
-          $ref:  "#/components/responses/400"
+          $ref: "#/components/responses/400"
         "404":
-          $ref:  "#/components/responses/404"
-  /articles: 
+          $ref: "#/components/responses/404"
+  /articles:
     get:
       tags:
         - Artikel verwalten
@@ -234,15 +234,15 @@ paths:
         required: true
         content:
           application/json:
-            schema: 
+            schema:
               $ref: "#/components/schemas/Article"
       responses:
         "204":
           $ref: "#/components/responses/204"
         "400":
-          $ref:  "#/components/responses/400"
+          $ref: "#/components/responses/400"
         "404":
-          $ref:  "#/components/responses/404"
+          $ref: "#/components/responses/404"
         "409":
           $ref: "#/components/responses/409Article"
     delete:
@@ -261,9 +261,9 @@ paths:
         "204":
           $ref: "#/components/responses/204"
         "400":
-          $ref:  "#/components/responses/400"
+          $ref: "#/components/responses/400"
         "404":
-          $ref:  "#/components/responses/404"
+          $ref: "#/components/responses/404"
   /stocks:
     get:
       tags:
@@ -299,7 +299,7 @@ paths:
           $ref: "#/components/responses/400"
         "409":
           $ref: "#/components/responses/409Stock"
-  /stocks/{id}: 
+  /stocks/{id}:
     patch:
       tags:
         - "Vorräte verwalten"
@@ -316,15 +316,15 @@ paths:
         required: true
         content:
           application/json:
-            schema: 
+            schema:
               $ref: "#/components/schemas/Stock"
       responses:
         "204":
           $ref: "#/components/responses/204"
         "400":
-          $ref:  "#/components/responses/400"
+          $ref: "#/components/responses/400"
         "404":
-          $ref:  "#/components/responses/404"
+          $ref: "#/components/responses/404"
         "409":
           $ref: "#/components/responses/409Stock"
     delete:
@@ -343,9 +343,23 @@ paths:
         "204":
           $ref: "#/components/responses/204"
         "400":
-          $ref:  "#/components/responses/400"
+          $ref: "#/components/responses/400"
         "404":
-          $ref:  "#/components/responses/404"       
+          $ref: "#/components/responses/404"
+  /stocks/rich:
+    get:
+      tags:
+        - Vorräte verwalten
+      summary: "Eine angereicherte Liste aller angelegten Vorräte. Wenn keine Vorräte angelegt sind, wird null zurück gegeben."
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StockRich"
 components:
   schemas:
     Box:
@@ -414,7 +428,7 @@ components:
           type: integer
           example: 2
         expiry:
-          type: string 
+          type: string
           format: date
           example: "31.12.2021"
     StockID:
@@ -424,7 +438,21 @@ components:
             id:
               type: integer
               example: 1
-        -  $ref: "#/components/schemas/Stock"
+        - $ref: "#/components/schemas/Stock"
+    StockRich:
+      allOf:
+        - type: object
+          properties:
+            articlestr:
+              type: string
+              example: Mehl
+            boxstr:
+              type: string
+              example: Box1
+            unitstr:
+              type: string
+              example: kg
+        - $ref: "#/components/schemas/StockID"
   responses:
     "204":
       description: No Content - Es gibt keinen Inhalt, den man für diese Anfrage senden kann, aber die Kopfzeilen können nützlich sein.
