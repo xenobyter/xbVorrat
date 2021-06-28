@@ -37,6 +37,23 @@ type StocksRich []struct {
 	Unit        string  `json:"unitstr"`
 }
 
+func (s Stocks) containsBox(id int64) bool {
+	for _, n := range s {
+		if id == n.Box {
+			return true
+		}
+	}
+	return false
+}
+func (s Stocks) containsArticle(id int64) bool {
+	for _, n := range s {
+		if id == n.Article {
+			return true
+		}
+	}
+	return false
+}
+
 func stocksPUT(c *gin.Context) {
 	articles := dbArticlesGET()
 	boxes := dbBoxesGET()

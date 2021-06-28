@@ -68,7 +68,6 @@ export default {
     boxDELETE(box) {
       this.box = box;
       const index = this.boxes.indexOf(this.box);
-      //TODO: Im BE prüfen, ob die Box leer ist
       axios
         .delete("http://localhost:8081/api/boxes/" + box.id, { timeout: 900 })
         .then((response) => {

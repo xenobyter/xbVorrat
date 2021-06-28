@@ -68,10 +68,14 @@ func boxesPATCH(c *gin.Context) {
 }
 
 func boxesDELETE(c *gin.Context) {
-	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-	if err != nil {
+	stocks := dbStocksGET()
+	id, parseErr := strconv.ParseInt(c.Param("id"), 10, 64)
+	switch {
+	case parseErr != nil:
 		c.Status(http.StatusBadRequest)
-	} else {
+	case stocks.containsBox(id):
+		c.String(http.StatusForbidden, "Box muss zum löschen leer sein")
+	default:
 		status := dbDeleteByID("boxes", id)
 		c.Status(status)
 	}

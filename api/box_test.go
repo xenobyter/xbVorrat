@@ -122,6 +122,7 @@ func TestPATCHBoxes(t *testing.T) {
 func TestDELETEBoxes(t *testing.T) {
 	setupDB()
 	router := SetupRouter()
+	dbStocksPUT(Stock{1,2,1,1,"31.12.2021"})
 
 	tests := []struct {
 		name   string
@@ -135,6 +136,7 @@ func TestDELETEBoxes(t *testing.T) {
 		{"DELETE ID 1", "DELETE", "/api/boxes/1", ``, "", 204},
 		{"DELETE mit ungültiger ID", "DELETE", "/api/boxes/invalid", ``, "", 400},
 		{"DELETE falscher ID", "DELETE", "/api/boxes/20", ``, "", 404},
+		{"DELETE nicht leer Box", "DELETE", "/api/boxes/2", ``, "Box muss zum löschen leer sein", 403},
 	}
 	for _, tt := range tests {
 

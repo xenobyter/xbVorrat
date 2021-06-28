@@ -77,11 +77,15 @@ func articlesPATCH(c *gin.Context) {
 	}
 }
 
-func articlesDELETE(c *gin.Context) { //TODO: Artikel nur löschen, wenn sie nicht benutzt werden
-	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-	if err != nil {
+func articlesDELETE(c *gin.Context) { 
+	stocks := dbStocksGET()
+	id, parseErr := strconv.ParseInt(c.Param("id"), 10, 64)
+	switch {
+	case parseErr != nil:
 		c.Status(http.StatusBadRequest)
-	} else {
+		case stocks.containsArticle(id):
+		c.String(http.StatusForbidden, "Artikel noch in Verwendung")
+	default:
 		status := dbDeleteByID("articles", id)
 		c.Status(status)
 	}

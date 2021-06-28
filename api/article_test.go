@@ -127,6 +127,7 @@ func Test_articlesDELETE(t *testing.T) {
 	setupDB()
 	router := SetupRouter()
 	dbUnitsPUT(Unit{"kg", "Kilogramm"})
+	dbStocksPUT(Stock{2, 1, 1, 1, "31.12.2021"})
 
 	tests := []struct {
 		name   string
@@ -140,6 +141,7 @@ func Test_articlesDELETE(t *testing.T) {
 		{"DELETE ID 1", "DELETE", "/api/articles/1", ``, "", 204},
 		{"DELETE mit ungültiger ID", "DELETE", "/api/articles/invalid", ``, "", 400},
 		{"DELETE falscher ID", "DELETE", "/api/articles/20", ``, "", 404},
+		{"DELETE Artikel in Benutzung", "DELETE", "/api/articles/2", ``, "Artikel noch in Verwendung", 403},
 	}
 	for _, tt := range tests {
 

@@ -6,7 +6,7 @@ info:
     Die API für xbVorrat ermöglicht die Verwaltung von zu bevorratenden Gegenständen in Lagerboxen.
 
     ### Änderungen
-    0.1.0 - Erstellt
+    1.0.0 - Initiale Version
 servers:
   - url: http://localhost:8081/api
 paths:
@@ -102,6 +102,8 @@ paths:
           $ref: "#/components/responses/204"
         "400":
           $ref: "#/components/responses/400"
+        "403":
+          description: Forbidden - Die Box kann nicht gelöscht werden. Sie wird noch verwendet.
         "404":
           $ref: "#/components/responses/404"
   /units:
@@ -262,6 +264,8 @@ paths:
           $ref: "#/components/responses/204"
         "400":
           $ref: "#/components/responses/400"
+        "403":
+          description: Forbidden - Dieser Artikel kann nicht gelöscht werden. Er ist noch in Verwendung.
         "404":
           $ref: "#/components/responses/404"
   /stocks:
