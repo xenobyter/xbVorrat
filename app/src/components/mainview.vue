@@ -51,6 +51,7 @@ export default {
   },
   data() {
     return {
+      api: process.env.VUE_APP_API,
       stocks: [
         {
           id: 1,
@@ -72,7 +73,7 @@ export default {
   methods: {
     stocksGET() {
       axios
-        .get("http://localhost:8081/api/stocks/rich", { timeout: 900 })
+        .get(this.api + "/stocks/rich", { timeout: 900 })
         .then((response) => {
           this.stocks = response.data;
         })
@@ -89,7 +90,7 @@ export default {
       this.showedit = false;
       axios
         .patch(
-          "http://localhost:8081/api/stocks/" + stock.id,
+          this.api + "/stocks/" + stock.id,
           {
             article: stock.article,
             box: stock.box,
@@ -117,7 +118,7 @@ export default {
       this.showedit = false;
       axios
         .put(
-          "http://localhost:8081/api/stocks",
+          this.api + "/stocks",
           {
             article: stock.article,
             box: stock.box,

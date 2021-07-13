@@ -4,6 +4,7 @@
         "gonic",
         "mattn",
         "rowid",
-        "sqlite"
+        "sqlite",
+        "xenobyter"
     ]
 }

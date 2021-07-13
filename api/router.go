@@ -32,5 +32,9 @@ func SetupRouter() *gin.Engine {
 	router.PATCH("/api/stocks/:id", stocksPATCH)
 	router.DELETE("/api/stocks/:id", stocksDELETE)
 
+	router.StaticFile("/", "app/dist/index.html")
+	router.Static("/css", "app/dist/css")
+    router.Static("/js", "app/dist/js")
+	
 	return router
 }

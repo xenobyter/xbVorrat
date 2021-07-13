@@ -43,6 +43,7 @@ export default {
   },
   data() {
     return {
+      api: process.env.VUE_APP_API,
       units: [],
       showedit: false,
       unit: Object,
@@ -52,7 +53,7 @@ export default {
   methods: {
     unitsGET() {
       axios
-        .get("http://localhost:8081/api/units", { timeout: 900 })
+        .get(this.api + "/units", { timeout: 900 })
         .then((response) => {
           this.units = response.data;
         })
@@ -69,7 +70,7 @@ export default {
       this.unit = unit;
       const index = this.units.indexOf(this.unit);
       axios
-        .delete("http://localhost:8081/api/units/" + unit.id, { timeout: 900 })
+        .delete(this.api + "/units/" + unit.id, { timeout: 900 })
         .then((response) => {
           console.log("Status:", response.status);
           this.units.splice(index, 1);
@@ -88,7 +89,7 @@ export default {
       this.showedit = false;
       axios
         .patch(
-          "http://localhost:8081/api/units/" + unit.id,
+          this.api + "/units/" + unit.id,
           {
             unit: unit.unit,
             long: unit.long,
@@ -113,7 +114,7 @@ export default {
       console.log(unit);
       axios
         .put(
-          "http://localhost:8081/api/units",
+          this.api + "/units",
           {
             unit: unit.unit,
             long: unit.long,

@@ -90,6 +90,7 @@ export default {
   props: { stock: Object },
   data() {
     return {
+      api: process.env.VUE_APP_API,
       res: Object,
       articles: [
         {
@@ -125,7 +126,7 @@ export default {
     },
     articlesGET() {
       axios
-        .get("http://localhost:8081/api/articles", { timeout: 900 })
+        .get(this.api + "/articles", { timeout: 900 })
         .then((response) => {
           this.articles = response.data;
           this.unitsGET();
@@ -137,7 +138,7 @@ export default {
     },
     boxesGET() {
       axios
-        .get("http://localhost:8081/api/boxes", { timeout: 900 })
+        .get(this.api + "/boxes", { timeout: 900 })
         .then((response) => {
           this.boxes = response.data;
         })

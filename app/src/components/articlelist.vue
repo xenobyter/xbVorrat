@@ -44,6 +44,7 @@ export default {
   },
   data() {
     return {
+      api: process.env.VUE_APP_API,
       articles: [
         {
           id: 1,
@@ -72,7 +73,7 @@ export default {
   methods: {
     articlesGET() {
       axios
-        .get("http://localhost:8081/api/articles", { timeout: 900 })
+        .get(this.api + "/articles", { timeout: 900 })
         .then((response) => {
           this.articles = response.data;
           this.unitsGET();
@@ -84,7 +85,7 @@ export default {
     },
     unitsGET() {
       axios
-        .get("http://localhost:8081/api/units", { timeout: 900 })
+        .get(this.api + "/units", { timeout: 900 })
         .then((response) => {
           this.units = response.data;
           this.untisMerge();
@@ -107,7 +108,7 @@ export default {
       this.article = article;
       const index = this.articles.indexOf(this.article);
       axios
-        .delete("http://localhost:8081/api/articles/" + article.id, {
+        .delete(this.api + "/articles/" + article.id, {
           timeout: 900,
         })
         .then((response) => {
@@ -128,7 +129,7 @@ export default {
       this.showedit = false;
       axios
         .patch(
-          "http://localhost:8081/api/articles/" + article.id,
+          this.api + "/articles/" + article.id,
           {
             name: article.name,
             unit: article.unit,
@@ -136,7 +137,7 @@ export default {
           { timeout: 900 }
         )
         .then((response) => {
-          article.long = this.getUnitById(article.unit).long
+          article.long = this.getUnitById(article.unit).long;
           this.articles[index] = { ...article };
           console.log("Status:", response.status);
         })
@@ -153,7 +154,7 @@ export default {
       this.showedit = false;
       axios
         .put(
-          "http://localhost:8081/api/articles",
+          this.api + "/articles",
           {
             name: article.name,
             unit: article.unit,

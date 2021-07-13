@@ -43,6 +43,7 @@ export default {
   },
   data() {
     return {
+      api: process.env.VUE_APP_API,
       boxes: [],
       showedit: false,
       box: Object,
@@ -52,7 +53,7 @@ export default {
   methods: {
     boxesGET() {
       axios
-        .get("http://localhost:8081/api/boxes", { timeout: 900 })
+        .get(this.api + "/boxes", { timeout: 900 })
         .then((response) => {
           this.boxes = response.data;
         })
@@ -69,7 +70,7 @@ export default {
       this.box = box;
       const index = this.boxes.indexOf(this.box);
       axios
-        .delete("http://localhost:8081/api/boxes/" + box.id, { timeout: 900 })
+        .delete(this.api + "/boxes/" + box.id, { timeout: 900 })
         .then((response) => {
           console.log("Status:", response.status);
           this.boxes.splice(index, 1);
@@ -88,7 +89,7 @@ export default {
       this.showedit = false;
       axios
         .patch(
-          "http://localhost:8081/api/boxes/" + box.id,
+          this.api + "/boxes/" + box.id,
           {
             name: box.name,
             notiz: box.notiz,
@@ -112,7 +113,7 @@ export default {
       this.showedit = false;
       axios
         .put(
-          "http://localhost:8081/api/boxes",
+          this.api + "/boxes",
           {
             name: box.name,
             notiz: box.notiz,
@@ -121,6 +122,7 @@ export default {
         )
         .then((response) => {
           console.log("Status:", response.status);
+          //BUG: Fehler beim Push der ersten Box in eine leere Liste
           this.boxes.push(box);
           const index = this.boxes.indexOf(box);
           this.boxes[index].id = response.data.id;
