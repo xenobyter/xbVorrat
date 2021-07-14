@@ -123,9 +123,7 @@ export default {
         )
         .then((response) => {
           console.log("Status:", response.status);
-          this.units.push(unit);
-          const index = this.units.indexOf(unit);
-          this.units[index].id = response.data.id;
+          this.unitsGET();
         })
         .catch((e) => {
           console.log("PUT", e);

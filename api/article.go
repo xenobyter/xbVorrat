@@ -20,6 +20,15 @@ type Articles []struct {
 
 func (a Articles) contains(id int64) bool {
 	for _, n := range a {
+		if id == n.ID {
+			return true
+		}
+	}
+	return false
+}
+
+func (a Articles) containsUnit(id int64) bool {
+	for _, n := range a {
 		if id == n.UnitID {
 			return true
 		}

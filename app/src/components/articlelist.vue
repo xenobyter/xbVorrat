@@ -163,10 +163,7 @@ export default {
         )
         .then((response) => {
           console.log("Status:", response.status);
-          article.long = this.getUnitById(article.unit).long;
-          this.articles.push(article);
-          const index = this.articles.indexOf(article);
-          this.articles[index].id = response.data.id;
+          this.articlesGET();
         })
         .catch((e) => {
           console.log("PUT", e);

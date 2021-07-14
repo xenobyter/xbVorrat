@@ -14,6 +14,7 @@ func Test_stocksPUT(t *testing.T) {
 	dbBoxesPUT(Box{"Box", "Notiz"})
 	dbUnitsPUT(Unit{"u", "Unit"})
 	dbArticlesPUT(Article{"Article", 1})
+	dbArticlesPUT(Article{"Article2", 1})
 
 	tests := []struct {
 		name   string
@@ -29,6 +30,7 @@ func Test_stocksPUT(t *testing.T) {
 		{"PUT invalide Größe", "PUT", "/api/stocks", `{"article":1,"box":1, "size":"invalid","quantity":1,"expiry":"31.12.2021"}`, ``, 400},
 		{"PUT invalide Anzahl", "PUT", "/api/stocks", `{"article":1,"box":1, "size":0.5,"quantity":"invalid","expiry":"31.12.2021"}`, ``, 400},
 		{"PUT invalides Verfallsdatum", "PUT", "/api/stocks", `{"article":1,"box":1, "size":0.5,"quantity":1,"expiry":"invalid"}`, ``, 400},
+		{"PUT zweiter Artikel", "PUT", "/api/stocks", `{"article":2,"box":1, "size":0.5,"quantity":1,"expiry":"31.12.2000"}`, `{"article":2,"box":1,"expiry":"31.12.2000","id":2,"quantity":1,"size":0.5}`, 201},
 	}
 	for _, tt := range tests {
 
@@ -96,6 +98,7 @@ func Test_stocksPATCH(t *testing.T) {
 	dbBoxesPUT(Box{"Box", "Notiz"})
 	dbUnitsPUT(Unit{"u", "Unit"})
 	dbArticlesPUT(Article{"Article", 1})
+	dbArticlesPUT(Article{"Article2", 1})
 
 	tests := []struct {
 		name   string
@@ -107,8 +110,9 @@ func Test_stocksPATCH(t *testing.T) {
 	}{
 		{"PATCH leere Liste", "PATCH", "/api/stocks/1", `{"article":1,"box":1, "size":0.5,"quantity":1,"expiry":"31.12.2021"}`, "", 404},
 		{"PATCH Verfallsdatum", "PATCH", "/api/stocks/1", `{"article":1,"box":1, "size":0.5,"quantity":1,"expiry":"31.12.2000"}`, "", 204},
+		{"PATCH Anzahl Artikel 2", "PATCH", "/api/stocks/1", `{"article":1,"box":1, "size":0.5,"quantity":2,"expiry":"31.12.2021"}`, "", 204},
 		{"PATCH Falsche Box", "PATCH", "/api/stocks/1", `{"article":1,"box":2, "size":0.5,"quantity":1,"expiry":"31.12.2000"}`, "Unbekannte Box", 409},
-		{"PATCH Falscher Artikel", "PATCH", "/api/stocks/1", `{"article":2,"box":1, "size":0.5,"quantity":1,"expiry":"31.12.2000"}`, "Unbekannter Artikel", 409},
+		{"PATCH Falscher Artikel", "PATCH", "/api/stocks/1", `{"article":3,"box":1, "size":0.5,"quantity":1,"expiry":"31.12.2000"}`, "Unbekannter Artikel", 409},
 		{"PATCH invalides Verfallsdatum", "PATCH", "/api/stocks/1", `{"article":1,"box":1, "size":0.5,"quantity":1,"expiry":"invalid"}`, "", 400},
 	}
 	for _, tt := range tests {
@@ -126,6 +130,7 @@ func Test_stocksPATCH(t *testing.T) {
 				t.Errorf("%v auf %v ist: %v, soll %v", tt.verb, tt.route, w.Body.String(), tt.res)
 			}
 			dbStocksPUT(Stock{1, 1, 0.5, 1, "31.12.2021"})
+			dbStocksPUT(Stock{2, 1, 0.5, 1, "31.12.2021"})
 		})
 	}
 

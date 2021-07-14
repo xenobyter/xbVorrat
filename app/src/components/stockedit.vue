@@ -136,6 +136,17 @@ export default {
           this.status = "GET: " + e.message;
         });
     },
+    unitsGET() {
+      axios
+        .get(this.api + "/units", { timeout: 900 })
+        .then((response) => {
+          this.units = response.data;
+        })
+        .catch((e) => {
+          console.log("GET", e);
+          this.status = "GET: " + e.message;
+        });
+    },
     boxesGET() {
       axios
         .get(this.api + "/boxes", { timeout: 900 })

@@ -73,7 +73,7 @@ func unitsDELETE(c *gin.Context) {
 	switch {
 	case err != nil:
 		c.Status(http.StatusBadRequest)
-	case articles.contains(id):
+	case articles.containsUnit(id):
 		c.Status(http.StatusConflict)
 	default:
 		status := dbDeleteByID("units", id)

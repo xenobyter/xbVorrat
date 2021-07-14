@@ -122,10 +122,7 @@ export default {
         )
         .then((response) => {
           console.log("Status:", response.status);
-          //BUG: Fehler beim Push der ersten Box in eine leere Liste
-          this.boxes.push(box);
-          const index = this.boxes.indexOf(box);
-          this.boxes[index].id = response.data.id;
+          this.boxesGET();
         })
         .catch((e) => {
           console.log("PUT", e);

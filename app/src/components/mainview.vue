@@ -113,7 +113,7 @@ export default {
       this.stock = { articlestr: "" };
       this.showedit = true;
     },
-    stockPUT(stock) {
+    stockPUT(stock) {  
       console.log(stock);
       this.showedit = false;
       axios

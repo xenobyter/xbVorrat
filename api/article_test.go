@@ -174,7 +174,7 @@ func TestArticles_contains(t *testing.T) {
 		args args
 		want bool
 	}{
-		{"Einfaches true", Articles{{3, "name", 1}}, args{1}, true},
+		{"Einfaches true", Articles{{3, "name", 1}}, args{3}, true},
 		{"Einfaches false", Articles{{3, "name", 1}}, args{2}, false},
 	}
 	for _, tt := range tests {
