@@ -3,8 +3,9 @@
   <boxlist v-if="show == 'boxlist'" />
   <unitlist v-if="show == 'unitlist'" />
   <articlelist v-if="show == 'articlelist'" />
-  <information v-if="show == 'information'"/>
-  <mainview v-if="show == ''"/>
+  <information v-if="show == 'information'" />
+  <mainview v-if="show == ''" />
+  <!-- TODO: Tastaturbedienung -->
 </template>
 
 <script>
@@ -14,6 +15,7 @@ import unitlist from "./components/unitlist";
 import articlelist from "./components/articlelist";
 import information from "./components/information.vue";
 import mainview from "./components/mainview.vue";
+import { version } from "../package";
 
 export default {
   name: "App",
@@ -28,12 +30,16 @@ export default {
   data() {
     return {
       show: "",
+      appVersion: version,
     };
   },
   methods: {
     showNav(item) {
       this.show = item;
     },
+  },
+  created() {
+    document.title = "xbVorrat v" + this.appVersion;
   },
 };
 </script>
