@@ -173,15 +173,4 @@ li {
 .boxRight {
   justify-content: flex-end;
 }
-.status {
-  background-color: var(--listen-hintergrund);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: absolute;
-  width: 100vw;
-  height: 1.4rem;
-  bottom: 0px;
-  margin-left: 0px;
-}
 </style>

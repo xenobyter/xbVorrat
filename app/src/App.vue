@@ -59,8 +59,20 @@ export default {
 body {
   margin-left: 1.5rem;
   margin-right: 1.5rem;
+  overflow: hidden; /* Hide scrollbars */
 }
 h1 {
   text-align: center;
+}
+.status {
+  background-color: var(--listen-hintergrund);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  width: calc(100vw - 2.5rem);
+  height: 1.4rem;
+  bottom: 0px;
+  margin-left: 0px;
 }
 </style>

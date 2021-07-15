@@ -145,17 +145,6 @@ export default {
 </script>
 
 <style scoped>
-.status {
-  background-color: var(--listen-hintergrund);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: absolute;
-  width: 100vw;
-  height: 1.4rem;
-  bottom: 0px;
-  margin-left: 0px;
-}
 table {
   width: calc(100vw - 2.5rem);
   border-collapse: collapse;

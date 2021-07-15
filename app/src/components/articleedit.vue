@@ -99,9 +99,11 @@ export default {
 }
 label {
   min-width: 4em;
+  margin-bottom: 0.1rem;
 }
 input {
   border: 0px;
+  margin-bottom: 0.1rem;
 }
 #notiz {
   padding-left: 0.5rem;
