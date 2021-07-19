@@ -5,7 +5,6 @@
   <articlelist v-if="show == 'articlelist'" v-on:nav="showNav" />
   <information v-if="show == 'information'" v-on:nav="showNav" />
   <mainview v-if="show == ''" v-on:nav="showNav" />
-  <!-- TODO: Tastaturbedienung -->
   <!-- TODO: Touchoptimierung -->
 </template>
 

@@ -20,7 +20,6 @@
         <td class="action">
           <a v-on:click="stockEDIT(stock)" class="edit">&#128393;</a>
           <a v-on:click="stockDELETE(stock)" class="delete">&#128465;</a>
-          <!-- TODO: Sicherheitsabfrage beim Löschen -->
         </td>
       </tr>
       <tr>
@@ -116,7 +115,6 @@ export default {
       this.showedit = true;
     },
     stockPUT(stock) {
-      console.log(stock);
       this.showedit = false;
       axios
         .put(
@@ -138,6 +136,21 @@ export default {
           console.log("PUT", e);
           this.status = `PUT: ${e.message}`;
         });
+    },
+    stockDELETE(stock) {
+      console.log(stock);
+      if (confirm(`${stock.articlestr} aus ${stock.boxstr} löschen?`)) {
+        axios
+          .delete(this.api + "/stocks/" + stock.id, { timeout: 900 })
+          .then((response) => {
+            console.log("Status:", response.status);
+            this.stocksGET();
+          })
+          .catch((e) => {
+            console.error("DELETE", e.message);
+            this.status = "DELETE: " + e.message;
+          });
+      }
     },
     keyHandler(e) {
       switch (e.key) {
