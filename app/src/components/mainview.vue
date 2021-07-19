@@ -20,6 +20,7 @@
         <td class="action">
           <a v-on:click="stockEDIT(stock)" class="edit">&#128393;</a>
           <a v-on:click="stockDELETE(stock)" class="delete">&#128465;</a>
+          <!-- TODO: Sicherheitsabfrage beim Löschen -->
         </td>
       </tr>
       <tr>
@@ -46,6 +47,7 @@ import stockedit from "./stockedit.vue";
 
 export default {
   name: "mainview",
+  emits: ["nav"],
   components: {
     stockedit,
   },
@@ -113,7 +115,7 @@ export default {
       this.stock = { articlestr: "" };
       this.showedit = true;
     },
-    stockPUT(stock) {  
+    stockPUT(stock) {
       console.log(stock);
       this.showedit = false;
       axios
@@ -137,9 +139,32 @@ export default {
           this.status = `PUT: ${e.message}`;
         });
     },
+    keyHandler(e) {
+      switch (e.key) {
+        case "+":
+          this.stockADD();
+          break;
+        case "2":
+          this.$emit("nav", "boxlist");
+          break;
+        case "3":
+          this.$emit("nav", "unitlist");
+          break;
+        case "4":
+          this.$emit("nav", "articlelist");
+          break;
+        case "5":
+          this.$emit("nav", "information");
+          break;
+      }
+    },
   },
   mounted() {
+    window.addEventListener("keyup", this.keyHandler);
     this.stocksGET();
+  },
+  unmounted() {
+    window.removeEventListener("keyup", this.keyHandler);
   },
 };
 </script>

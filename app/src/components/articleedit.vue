@@ -11,7 +11,7 @@
       </div>
       <div class="name">
         <label for="name">Name:</label>
-        <input type="text" id="name" v-model="res.name" ref="name" />
+        <input type="text" id="name" v-model="res.name" ref="name" v-on:keydown.esc="closeEdit" />
       </div>
       <div class="unit">
         <label for="unit">Einheit:</label>

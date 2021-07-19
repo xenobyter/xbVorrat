@@ -38,13 +38,17 @@ import boxedit from "./boxedit.vue";
 
 export default {
   name: "boxlist",
+  emits: ["nav"],
   components: {
     boxedit,
   },
   data() {
     return {
       api: process.env.VUE_APP_API,
-      boxes: [],
+      boxes: [
+        { id: 1, name: "Box1", notiz: "Notiz1" },
+        { id: 2, name: "Box2", notiz: "Notiz2" },
+      ],
       showedit: false,
       box: Object,
       status: "",
@@ -58,10 +62,6 @@ export default {
           this.boxes = response.data;
         })
         .catch((e) => {
-          this.boxes = [
-            { id: 1, name: "Fehler", notiz: "Fehler beim Abruf" },
-            { id: 2, name: "Fehler", notiz: "Fehler beim Abruf" },
-          ];
           console.log("GET", e);
           this.status = "GET: " + e.message;
         });
@@ -129,9 +129,23 @@ export default {
           this.status = "PUT: " + e.message;
         });
     },
+    keyHandler(e) {
+      switch (e.key) {
+        case "+":
+          this.boxAdd();
+          break;
+        case "1":
+          this.$emit("nav", "");
+          break;
+      }
+    },
   },
   mounted() {
+    window.addEventListener("keyup", this.keyHandler);
     this.boxesGET();
+  },
+  unmounted() {
+    window.removeEventListener("keyup", this.keyHandler);
   },
 };
 </script>

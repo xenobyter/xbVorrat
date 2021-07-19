@@ -38,13 +38,17 @@ import unitedit from "./unitedit.vue";
 
 export default {
   name: "unitlist",
+  emits: ["nav"],
   components: {
     unitedit,
   },
   data() {
     return {
       api: process.env.VUE_APP_API,
-      units: [],
+      units: [
+        { id: 1, unit: "kg", long: "Kilogramm" },
+        { id: 2, unit: "l", long: "Liter" },
+      ],
       showedit: false,
       unit: Object,
       status: "",
@@ -58,10 +62,6 @@ export default {
           this.units = response.data;
         })
         .catch((e) => {
-          this.units = [
-            { id: 1, unit: "Fehler", long: "Fehler beim Abruf" },
-            { id: 2, unit: "Fehler", long: "Fehler beim Abruf" },
-          ];
           console.log("GET", e);
           this.status = "GET: " + e.message;
         });
@@ -130,9 +130,23 @@ export default {
           this.status = "PUT: " + e.message;
         });
     },
+    keyHandler(e) {
+      switch (e.key) {
+        case "+":
+          this.unitAdd();
+          break;
+        case "1":
+          this.$emit("nav", "");
+          break;
+      }
+    },
   },
   mounted() {
+    window.addEventListener("keyup", this.keyHandler);
     this.unitsGET();
+  },
+  unmounted() {
+    window.removeEventListener("keyup", this.keyHandler);
   },
 };
 </script>

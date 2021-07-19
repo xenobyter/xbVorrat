@@ -1,6 +1,11 @@
 <template>
   <div class="row">
-    <input type="checkbox" id="hamburg" v-on:click="checked = !checked" :checked="checked"/>
+    <input
+      type="checkbox"
+      id="hamburg"
+      v-on:click="checked = !checked"
+      :checked="checked"
+    />
     <label for="hamburg" class="hamburg">
       <span class="line"></span>
       <span class="line"></span>
@@ -27,7 +32,7 @@ export default {
   },
   methods: {
     show(item) {
-      this.checked =false;
+      this.checked = false;
       this.$emit("nav", item);
     },
   },

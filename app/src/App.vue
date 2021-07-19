@@ -1,11 +1,12 @@
 <template >
   <navigation v-on:nav="showNav" />
-  <boxlist v-if="show == 'boxlist'" />
-  <unitlist v-if="show == 'unitlist'" />
-  <articlelist v-if="show == 'articlelist'" />
-  <information v-if="show == 'information'" />
-  <mainview v-if="show == ''" />
+  <boxlist v-if="show == 'boxlist'" v-on:nav="showNav" />
+  <unitlist v-if="show == 'unitlist'" v-on:nav="showNav" />
+  <articlelist v-if="show == 'articlelist'" v-on:nav="showNav" />
+  <information v-if="show == 'information'" v-on:nav="showNav" />
+  <mainview v-if="show == ''" v-on:nav="showNav" />
   <!-- TODO: Tastaturbedienung -->
+  <!-- TODO: Touchoptimierung -->
 </template>
 
 <script>

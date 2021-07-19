@@ -39,6 +39,7 @@ import articleedit from "./articleedit.vue";
 
 export default {
   name: "articlelist",
+  emits: ["nav"],
   components: {
     articleedit,
   },
@@ -176,9 +177,23 @@ export default {
       });
       return unit;
     },
+    keyHandler(e) {
+      switch (e.key) {
+        case "+":
+          this.articleAdd();
+          break;
+        case "1":
+          this.$emit("nav", "");
+          break;
+      }
+    },
   },
   mounted() {
+    window.addEventListener("keyup", this.keyHandler);
     this.articlesGET();
+  },
+  unmounted() {
+    window.removeEventListener("keyup", this.keyHandler);
   },
 };
 </script>

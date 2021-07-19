@@ -10,7 +10,12 @@
         <div>
           {{ res.article }}
         </div>
-        <select v-on:change="selectArticle($event)" id="selArticle" ref="start">
+        <select
+          v-on:change="selectArticle($event)"
+          v-on:keydown.esc="closeEdit"
+          id="selArticle"
+          ref="start"
+        >
           <option>Auswahl:</option>
           <option
             v-for="article in articles"
@@ -27,7 +32,10 @@
         <div>
           {{ res.box }}
         </div>
-        <select v-on:change="selectBox($event)" id="selBox">
+        <select
+          v-on:change="selectBox($event)"
+          id="selBox"
+        >
           <option>Auswahl:</option>
           <option
             v-for="box in boxes"
