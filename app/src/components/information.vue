@@ -11,6 +11,10 @@
       die Tasten "2" bis "4" erreichbar. Diese Informationsseite wird über die
       "5" geöffnet. Von jeder Unterfunktion führt die "1" zur Hauptseite zurück.
     </div>
+    <h2>Lizenzen und Erwähnungen</h2>
+    <div>
+      Die App verwendet als Schriftart <a href="https://fonts.google.com/specimen/Nunito">Nunito</a> und hosted diese lokal. Alle Symbole sind aus den <a href="https://fonts.google.com/icons">Material Icons</a> und stehen unter <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache license 2.0</a>.
+    </div>
   </div>
 </template>
 
@@ -37,4 +41,7 @@ export default {
 </script>
 
 <style scoped>
+div {
+  margin-bottom: 0.5rem;
+}
 </style>

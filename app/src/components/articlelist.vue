@@ -10,14 +10,20 @@
             <div class="articleNotiz">{{ article.long }}</div>
           </div>
           <div class="articleRight">
-            <a v-on:click="articleEDIT(article)" class="edit">&#128393;</a>
-            <a v-on:click="articleDELETE(article)" class="delete">&#128465;</a>
+            <button v-on:click="articleEDIT(article)" class="edit">
+              <img src="/edit_black_24dp.svg" alt="&#128393;" class="icon" />
+            </button>
+            <button v-on:click="articleDELETE(article)" class="delete">
+              <img src="/delete_black_24dp.svg" alt="&#128465;" class="icon" />
+            </button>
           </div>
         </div>
       </li>
       <li>
         <div class="article articleRight">
-          <a v-on:click="articleAdd()" class="add">&#10750;</a>
+          <button v-on:click="articleAdd()" class="add">
+            <img src="/add_black_24dp.svg" alt="&#10750;" class="icon" />
+          </button>
         </div>
       </li>
       <articleedit

@@ -18,13 +18,19 @@
         <td class="nopad">{{ stock.size }}</td>
         <td>{{ stock.unitstr }}</td>
         <td class="action">
-          <a v-on:click="stockEDIT(stock)" class="edit">&#128393;</a>
-          <a v-on:click="stockDELETE(stock)" class="delete">&#128465;</a>
+          <button v-on:click="stockEDIT(stock)" class="edit">
+            <img src="/edit_black_24dp.svg" alt="&#128393;" class="icon" />
+          </button>
+          <button v-on:click="stockDELETE(stock)" class="delete">
+            <img src="/delete_black_24dp.svg" alt="&#128465;" class="icon" />
+          </button>
         </td>
       </tr>
       <tr>
         <td colspan="8" class="action">
-          <a v-on:click="stockADD()" class="add">&#10750;</a>
+          <button v-on:click="stockADD()" class="add">
+            <img src="/add_black_24dp.svg" alt="&#10750;" class="icon" />
+          </button>
         </td>
       </tr>
       <tr v-for="stock in stocks" v-bind:key="stock.id"></tr>
@@ -138,7 +144,6 @@ export default {
         });
     },
     stockDELETE(stock) {
-      console.log(stock);
       if (confirm(`${stock.articlestr} aus ${stock.boxstr} löschen?`)) {
         axios
           .delete(this.api + "/stocks/" + stock.id, { timeout: 900 })

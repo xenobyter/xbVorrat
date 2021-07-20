@@ -10,14 +10,20 @@
             <div class="unitNotiz">{{ unit.long }}</div>
           </div>
           <div class="unitRight">
-            <a v-on:click="unitEDIT(unit)" class="edit">&#128393;</a>
-            <a v-on:click="unitDELETE(unit)" class="delete">&#128465;</a>
+            <button v-on:click="unitEDIT(unit)" class="edit">
+              <img src="/edit_black_24dp.svg" alt="&#128393;" class="icon" />
+            </button>
+            <button v-on:click="unitDELETE(unit)" class="delete">
+              <img src="/delete_black_24dp.svg" alt="&#128465;" class="icon" />
+            </button>
           </div>
         </div>
       </li>
       <li>
         <div class="unit unitRight">
-          <a v-on:click="unitAdd()" class="add">&#10750;</a>
+          <button v-on:click="unitAdd()" class="add">
+            <img src="/add_black_24dp.svg" alt="&#10750;" class="icon" />
+          </button>
         </div>
       </li>
       <unitedit

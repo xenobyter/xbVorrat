@@ -10,14 +10,20 @@
             <div class="boxNotiz">{{ box.notiz }}</div>
           </div>
           <div class="boxRight">
-            <a v-on:click="boxEDIT(box)" class="edit">&#128393;</a>
-            <a v-on:click="boxDELETE(box)" class="delete">&#128465;</a>
+            <button v-on:click="boxEDIT(box)" class="edit">
+              <img src="/edit_black_24dp.svg" alt="&#10750;" class="icon" />
+            </button>
+            <button v-on:click="boxDELETE(box)" class="delete">
+              <img src="/delete_black_24dp.svg" alt="&#128465;" class="icon" />
+            </button>
           </div>
         </div>
       </li>
       <li>
         <div class="box boxRight">
-          <a v-on:click="boxAdd()" class="add">&#10750;</a>
+          <button v-on:click="boxAdd()" class="add">
+            <img src="/add_black_24dp.svg" alt="&#10750;" class="icon" />
+          </button>
         </div>
       </li>
       <boxedit

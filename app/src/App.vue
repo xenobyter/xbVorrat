@@ -45,16 +45,42 @@ export default {
 </script>
 
 <style>
+/* nunito-200 - latin */
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 200;
+  src: local(""), url("/fonts/nunito-v16-latin-200.woff2") format("woff2"),
+    /* Chrome 26+, Opera 23+, Firefox 39+ */
+      url("/fonts/nunito-v16-latin-200.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+/* nunito-300 - latin */
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 300;
+  src: local(""), url("/fonts/nunito-v16-latin-300.woff2") format("woff2"),
+    /* Chrome 26+, Opera 23+, Firefox 39+ */
+      url("/fonts/nunito-v16-latin-300.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+/* nunito-regular - latin */
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 400;
+  src: local(""), url("/fonts/nunito-v16-latin-regular.woff2") format("woff2"),
+    /* Chrome 26+, Opera 23+, Firefox 39+ */
+      url("/fonts/nunito-v16-latin-regular.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
 :root {
-  --text-color: #2c3e50;
+  --text-color: black;
   --listen-hintergrund: gainsboro;
   --rand-links: 1.5rem;
 }
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   color: var(--text-color);
+  font-family: "Nunito", sans-serif;
+  font-weight: 300;
 }
 body {
   margin-left: 1.5rem;
@@ -74,5 +100,12 @@ h1 {
   height: 1.4rem;
   bottom: 0px;
   margin-left: 0px;
+}
+.icon {
+  height: 1rem;
+  width: auto;
+}
+button {
+  margin: 0.15rem 0 0.15rem 0.15rem;
 }
 </style>
