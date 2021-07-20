@@ -25,7 +25,7 @@ func SetupRouter() *gin.Engine {
 	router.PUT("/api/articles", articlesPUT)
 	router.PATCH("/api/articles/:id", articlesPATCH)
 	router.DELETE("/api/articles/:id", articlesDELETE)
-	
+
 	router.GET("/api/stocks", stocksGET)
 	router.GET("/api/stocks/rich", stocksRichGET)
 	router.PUT("/api/stocks", stocksPUT)
@@ -34,7 +34,13 @@ func SetupRouter() *gin.Engine {
 
 	router.StaticFile("/", "app/dist/index.html")
 	router.Static("/css", "app/dist/css")
-    router.Static("/js", "app/dist/js")
-	
+	router.Static("/fonts", "app/dist/fonts")
+	router.Static("/js", "app/dist/js")
+
+	router.StaticFile("/add_black_24dp.svg", "app/dist/add_black_24dp.svg")
+	router.StaticFile("/delete_black_24dp.svg", "app/dist/delete_black_24dp.svg")
+	router.StaticFile("/edit_black_24dp.svg", "app/dist/edit_black_24dp.svg")
+	router.StaticFile("/favicon.svg", "app/dist/favicon.svg")
+
 	return router
 }

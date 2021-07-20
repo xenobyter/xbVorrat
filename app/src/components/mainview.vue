@@ -4,6 +4,7 @@
     <table>
       <tr>
         <th>Name</th>
+        <!-- TODO: Sortierfunktion -->
         <th>Box</th>
         <th>Datum</th>
         <th colspan="4">Menge</th>
