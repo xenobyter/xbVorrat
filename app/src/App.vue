@@ -50,8 +50,7 @@ export default {
   font-style: normal;
   font-weight: 200;
   src: local(""), url("/fonts/nunito-v16-latin-200.woff2") format("woff2"),
-    /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url("/fonts/nunito-v16-latin-200.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    url("/fonts/nunito-v16-latin-200.woff") format("woff");
 }
 /* nunito-300 - latin */
 @font-face {
@@ -59,8 +58,7 @@ export default {
   font-style: normal;
   font-weight: 300;
   src: local(""), url("/fonts/nunito-v16-latin-300.woff2") format("woff2"),
-    /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url("/fonts/nunito-v16-latin-300.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    url("/fonts/nunito-v16-latin-300.woff") format("woff");
 }
 /* nunito-regular - latin */
 @font-face {
@@ -68,8 +66,7 @@ export default {
   font-style: normal;
   font-weight: 400;
   src: local(""), url("/fonts/nunito-v16-latin-regular.woff2") format("woff2"),
-    /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url("/fonts/nunito-v16-latin-regular.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    url("/fonts/nunito-v16-latin-regular.woff") format("woff");
 }
 :root {
   --text-color: black;
@@ -84,7 +81,7 @@ export default {
 body {
   margin-left: 1.5rem;
   margin-right: 1.5rem;
-  overflow: hidden; /* Hide scrollbars */
+  overflow-x: hidden;
 }
 h1 {
   text-align: center;
@@ -94,8 +91,8 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  position: absolute;
-  width: calc(100vw - 2.5rem);
+  position: fixed;
+  width: calc(100vw - 3rem);
   height: 1.4rem;
   bottom: 0px;
   margin-left: 0px;

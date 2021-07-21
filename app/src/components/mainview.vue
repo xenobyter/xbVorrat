@@ -198,8 +198,9 @@ export default {
 
 <style scoped>
 table {
-  width: calc(100vw - 2.5rem);
+  width: calc(100vw - 3rem);
   border-collapse: collapse;
+  margin-bottom: 2rem;
 }
 td,
 th {
@@ -225,7 +226,7 @@ td.nopad {
   margin: 0;
   width: 0.6rem;
 }
-@media screen and (max-width: 306px) {
+@media screen and (max-width: 320px) {
   td,
   th {
     font-size: x-small;
