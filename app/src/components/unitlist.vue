@@ -11,10 +11,18 @@
           </div>
           <div class="unitRight">
             <button v-on:click="unitEDIT(unit)" class="edit">
-              <img src="/edit_black_24dp.svg" alt="&#128393;" class="icon" />
+              <img
+                src="/icons/edit_black_24dp.svg"
+                alt="&#128393;"
+                class="icon"
+              />
             </button>
             <button v-on:click="unitDELETE(unit)" class="delete">
-              <img src="/delete_black_24dp.svg" alt="&#128465;" class="icon" />
+              <img
+                src="/icons/delete_black_24dp.svg"
+                alt="&#128465;"
+                class="icon"
+              />
             </button>
           </div>
         </div>
@@ -22,7 +30,7 @@
       <li>
         <div class="unit unitRight">
           <button v-on:click="unitAdd()" class="add">
-            <img src="/add_black_24dp.svg" alt="&#10750;" class="icon" />
+            <img src="/icons/add_black_24dp.svg" alt="&#10750;" class="icon" />
           </button>
         </div>
       </li>

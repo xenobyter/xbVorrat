@@ -36,11 +36,7 @@ func SetupRouter() *gin.Engine {
 	router.Static("/css", "app/dist/css")
 	router.Static("/fonts", "app/dist/fonts")
 	router.Static("/js", "app/dist/js")
-
-	router.StaticFile("/add_black_24dp.svg", "app/dist/add_black_24dp.svg")
-	router.StaticFile("/delete_black_24dp.svg", "app/dist/delete_black_24dp.svg")
-	router.StaticFile("/edit_black_24dp.svg", "app/dist/edit_black_24dp.svg")
-	router.StaticFile("/favicon.svg", "app/dist/favicon.svg")
+	router.Static("/icons", "app/dist/icons")
 
 	return router
 }

@@ -11,10 +11,18 @@
           </div>
           <div class="boxRight">
             <button v-on:click="boxEDIT(box)" class="edit">
-              <img src="/edit_black_24dp.svg" alt="&#10750;" class="icon" />
+              <img
+                src="/icons/edit_black_24dp.svg"
+                alt="&#10750;"
+                class="icon"
+              />
             </button>
             <button v-on:click="boxDELETE(box)" class="delete">
-              <img src="/delete_black_24dp.svg" alt="&#128465;" class="icon" />
+              <img
+                src="/icons/delete_black_24dp.svg"
+                alt="&#128465;"
+                class="icon"
+              />
             </button>
           </div>
         </div>
@@ -22,7 +30,7 @@
       <li>
         <div class="box boxRight">
           <button v-on:click="boxAdd()" class="add">
-            <img src="/add_black_24dp.svg" alt="&#10750;" class="icon" />
+            <img src="/icons/add_black_24dp.svg" alt="&#10750;" class="icon" />
           </button>
         </div>
       </li>
