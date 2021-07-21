@@ -167,6 +167,7 @@ export default {
       }
     },
     keyHandler(e) {
+      if (this.showedit) return
       switch (e.key) {
         case "+":
           this.stockADD();

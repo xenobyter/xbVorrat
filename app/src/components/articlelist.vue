@@ -192,6 +192,7 @@ export default {
       return unit;
     },
     keyHandler(e) {
+      if (this.showedit) return;
       switch (e.key) {
         case "+":
           this.articleAdd();
