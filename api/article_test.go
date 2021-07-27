@@ -10,6 +10,7 @@ import (
 
 func Test_articlesPUT(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 	unit := dbUnitsPUT(Unit{"u", "Unit"})
 
@@ -44,11 +45,11 @@ func Test_articlesPUT(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func Test_articlesGET(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 	dbUnitsPUT(Unit{"kg", "Kilogramm"})
 
@@ -85,6 +86,7 @@ func Test_articlesGET(t *testing.T) {
 
 func TestArticlesPatch(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 	dbUnitsPUT(Unit{"kg", "Kilogramm"})
 
@@ -120,11 +122,11 @@ func TestArticlesPatch(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func Test_articlesDELETE(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 	dbUnitsPUT(Unit{"kg", "Kilogramm"})
 	dbStocksPUT(Stock{2, 1, 1, 1, "31.12.2021"})
@@ -161,7 +163,6 @@ func Test_articlesDELETE(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func TestArticles_contains(t *testing.T) {

@@ -32,6 +32,7 @@ func teardownDB() {
 
 func Test_boxesPUT(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 
 	tests := []struct {
 		name   string
@@ -50,11 +51,11 @@ func Test_boxesPUT(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func TestBoxesGET(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 
 	tests := []struct {
 		name string
@@ -73,11 +74,11 @@ func TestBoxesGET(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func Test_dbBoxesPATCH(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 
 	type args struct {
 		id  int64
@@ -116,11 +117,11 @@ func Test_dbBoxesPATCH(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func Test_dbBoxesDELETE(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 
 	type args struct {
 		table string
@@ -148,11 +149,11 @@ func Test_dbBoxesDELETE(t *testing.T) {
 		dbBoxesPUT(Box{"name", "notiz"})
 	}
 
-	teardownDB()
 }
 
 func Test_dbUnitsPUT(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 
 	tests := []struct {
 		name   string
@@ -171,11 +172,11 @@ func Test_dbUnitsPUT(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func TestUnitsGET(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 
 	tests := []struct {
 		name string
@@ -194,11 +195,11 @@ func TestUnitsGET(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func Test_dbUnitsPATCH(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 
 	type args struct {
 		id   int64
@@ -237,11 +238,11 @@ func Test_dbUnitsPATCH(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func Test_dbUnitsDELETE(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 
 	type args struct {
 		table string
@@ -269,11 +270,11 @@ func Test_dbUnitsDELETE(t *testing.T) {
 		dbUnitsPUT(Unit{"name", "notiz"})
 	}
 
-	teardownDB()
 }
 
 func Test_dbArticlesPUT(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 
 	tests := []struct {
 		name    string
@@ -292,11 +293,11 @@ func Test_dbArticlesPUT(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func Test_dbArticlesGET(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 
 	tests := []struct {
 		name         string
@@ -315,11 +316,11 @@ func Test_dbArticlesGET(t *testing.T) {
 		dbArticlesPUT(Article{"name", 1})
 	}
 
-	teardownDB()
 }
 
 func Test_dbArticlesPATCH(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 
 	type args struct {
 		id      int64
@@ -348,11 +349,11 @@ func Test_dbArticlesPATCH(t *testing.T) {
 		dbArticlesPUT(Article{"name", 1})
 	}
 
-	teardownDB()
 }
 
 func Test_dbArticlesDELETE(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 
 	type args struct {
 		table string
@@ -380,11 +381,11 @@ func Test_dbArticlesDELETE(t *testing.T) {
 		dbArticlesPUT(Article{"name", 1})
 	}
 
-	teardownDB()
 }
 
 func Test_dbStocksPUT(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 
 	tests := []struct {
 		name   string
@@ -403,11 +404,11 @@ func Test_dbStocksPUT(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func Test_dbStocksGET(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 
 	tests := []struct {
 		name       string
@@ -426,11 +427,11 @@ func Test_dbStocksGET(t *testing.T) {
 		dbStocksPUT(Stock{1, 1, 0.5, 2, "31.12.2021"})
 	}
 
-	teardownDB()
 }
 
 func Test_dbStocksPATCH(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 
 	type args struct {
 		id    int64
@@ -458,33 +459,42 @@ func Test_dbStocksPATCH(t *testing.T) {
 		dbStocksPUT(Stock{1, 1, 0.5, 2, "31.12.2021"})
 	}
 
-	teardownDB()
 }
 
 func Test_dbStocksRichGET(t *testing.T) {
 	setupDB()
+	defer teardownDB()
+	
 	dbBoxesPUT(Box{"Box1", ""})
 	dbBoxesPUT(Box{"Box2", ""})
 	dbArticlesPUT(Article{"Artikel1", 1})
 	dbArticlesPUT(Article{"Artikel2", 2})
 	dbUnitsPUT(Unit{"u1", ""})
 	dbUnitsPUT(Unit{"u2", ""})
-	dbStocksPUT(Stock{1, 1, 0.5, 2, "31.12.2021"})
-	dbStocksPUT(Stock{2, 2, 0.5, 2, "31.12.2021"})
-
+	dbStocksPUT(Stock{1, 1, 0.5, 2, "01.01.2021"})
+	dbStocksPUT(Stock{2, 2, 0.5, 2, "31.12.2020"})
+	type args struct {
+		sort, order string
+	}
 	tests := []struct {
 		name       string
+		args       args
 		wantStocks StocksRich
 	}{
-		{"Zwei Artikel", StocksRich{{1, 1, 1, 0.5, 2, "31.12.2021", "Artikel1", "Box1", "u1"}, {2, 2, 2, 0.5, 2, "31.12.2021", "Artikel2", "Box2", "u2"}}},
+		{"Zwei Artikel", args{"", ""}, StocksRich{{1, 1, 1, 0.5, 2, "01.01.2021", "Artikel1", "Box1", "u1"}, {2, 2, 2, 0.5, 2, "31.12.2020", "Artikel2", "Box2", "u2"}}},
+		{"Sort ID Aufsteigend", args{"id", "asc"}, StocksRich{{1, 1, 1, 0.5, 2, "01.01.2021", "Artikel1", "Box1", "u1"}, {2, 2, 2, 0.5, 2, "31.12.2020", "Artikel2", "Box2", "u2"}}},
+		{"Sort ID Absteigend", args{"id", "desc"}, StocksRich{{2, 2, 2, 0.5, 2, "31.12.2020", "Artikel2", "Box2", "u2"}, {1, 1, 1, 0.5, 2, "01.01.2021", "Artikel1", "Box1", "u1"}}},
+		{"Sort ID falsche Sortierung", args{"_", "asc"}, StocksRich{{1, 1, 1, 0.5, 2, "01.01.2021", "Artikel1", "Box1", "u1"}, {2, 2, 2, 0.5, 2, "31.12.2020", "Artikel2", "Box2", "u2"}}},
+		{"Sort ID falsche Richtung", args{"id", "_"}, StocksRich{{1, 1, 1, 0.5, 2, "01.01.2021", "Artikel1", "Box1", "u1"}, {2, 2, 2, 0.5, 2, "31.12.2020", "Artikel2", "Box2", "u2"}}},
+		{"Sort ID Artikel absteigend", args{"articlestr", "desc"}, StocksRich{{2, 2, 2, 0.5, 2, "31.12.2020", "Artikel2", "Box2", "u2"}, {1, 1, 1, 0.5, 2, "01.01.2021", "Artikel1", "Box1", "u1"}}},
+		{"Sort ID Datum absteigend", args{"expiry", "desc"}, StocksRich{{1, 1, 1, 0.5, 2, "01.01.2021", "Artikel1", "Box1", "u1"}, {2, 2, 2, 0.5, 2, "31.12.2020", "Artikel2", "Box2", "u2"}}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if gotStocks := dbStocksRichGET(); !reflect.DeepEqual(gotStocks, tt.wantStocks) {
+			if gotStocks := dbStocksRichGET(tt.args.sort, tt.args.order); !reflect.DeepEqual(gotStocks, tt.wantStocks) {
 				t.Errorf("dbStocksRichGET() = %v, want %v", gotStocks, tt.wantStocks)
 			}
 		})
 	}
 
-	teardownDB()
 }

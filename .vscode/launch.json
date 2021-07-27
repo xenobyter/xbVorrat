@@ -5,7 +5,28 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "debug go",
+      "name": "Launch Edge",
+      "request": "launch",
+      "type": "pwa-msedge",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}/app"
+    },
+    {
+      "type": "browser-preview",
+      "request": "launch",
+      "name": "Launch Browser Preview",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}/app"
+    },
+    {
+      "type": "pwa-chrome",
+      "request": "launch",
+      "name": "Launch Chrome",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}/app"
+    },
+    {
+      "name": "Debug Go",
       "type": "go",
       "request": "attach",
       "mode": "remote",
@@ -14,18 +35,11 @@
       "host": "127.0.0.1"
     },
     {
-      "type": "browser-preview",
+      "name": "Launch Microsoft Edge and open the Edge DevTools",
       "request": "launch",
-      "name": "Browser Preview: Launch",
+      "type": "vscode-edge-devtools.debug",
       "url": "http://localhost:8080",
       "webRoot": "${workspaceFolder}/app"
-    },
-    {
-      "type": "pwa-chrome",
-      "request": "launch",
-      "name": "Launch Chrome against localhost",
-      "url": "http://localhost:8080",
-      "webRoot": "${workspaceFolder}/app"
-  },
+    }
   ]
 }

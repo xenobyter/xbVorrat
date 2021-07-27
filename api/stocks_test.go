@@ -9,6 +9,7 @@ import (
 
 func Test_stocksPUT(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 
 	dbBoxesPUT(Box{"Box", "Notiz"})
@@ -49,11 +50,11 @@ func Test_stocksPUT(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func Test_stocksGET(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 
 	dbBoxesPUT(Box{"Box", "Notiz"})
@@ -69,8 +70,8 @@ func Test_stocksGET(t *testing.T) {
 		status int
 	}{
 		{"GET leere Liste", "GET", "/api/stocks", "", "null", 200},
-		{"GET ein Artikel", "GET", "/api/stocks", "", `[{"id":1,"article":1,"box":1,"size":0.5,"quantity":2,"expiry":"31.12.2021"}]`, 200},
-		{"GET zwei Artikel", "GET", "/api/stocks", "", `[{"id":1,"article":1,"box":1,"size":0.5,"quantity":2,"expiry":"31.12.2021"},{"id":2,"article":1,"box":1,"size":0.5,"quantity":2,"expiry":"31.12.2021"}]`, 200},
+		{"GET ein Artikel", "GET", "/api/stocks", "", `[{"id":1,"article":1,"box":1,"size":0.5,"quantity":2,"expiry":"31.12.2021","articlestr":"Article","boxstr":"Box","unitstr":"u"}]`, 200},
+		{"GET zwei Artikel", "GET", "/api/stocks", "", `[{"id":1,"article":1,"box":1,"size":0.5,"quantity":2,"expiry":"31.12.2021","articlestr":"Article","boxstr":"Box","unitstr":"u"},{"id":2,"article":1,"box":1,"size":0.5,"quantity":2,"expiry":"31.12.2021","articlestr":"Article","boxstr":"Box","unitstr":"u"}]`, 200},
 	}
 	for _, tt := range tests {
 
@@ -93,6 +94,7 @@ func Test_stocksGET(t *testing.T) {
 
 func Test_stocksPATCH(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 
 	dbBoxesPUT(Box{"Box", "Notiz"})
@@ -134,7 +136,6 @@ func Test_stocksPATCH(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func Test_expiryDateCheck(t *testing.T) {
@@ -159,6 +160,7 @@ func Test_expiryDateCheck(t *testing.T) {
 
 func Test_stocksDELETE(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 
 	tests := []struct {
@@ -192,5 +194,4 @@ func Test_stocksDELETE(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }

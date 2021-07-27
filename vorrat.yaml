@@ -1,12 +1,15 @@
 openapi: "3.0.2"
 info:
   title: xbVorrat API
-  version: "0.1.0"
+  version: "1.1.0"
   description: |
     Die API für xbVorrat ermöglicht die Verwaltung von zu bevorratenden Gegenständen in Lagerboxen.
 
     ### Änderungen
-    1.0.0 - Initiale Version
+    Version | Beschreibung
+    --------|-------------
+    1.0.0   | Initiale Version
+    1.1.0   | Der Endpunkt /stocks/rich wird zurück gebaut, die Funktionalität wird in der GET-Methode von /stocks integriert. Ein zusätzlicher query-Parameter zur Sortierung wurde hinzugefügt.
 servers:
   - url: http://localhost:8081/api
 paths:
@@ -273,6 +276,30 @@ paths:
       tags:
         - Vorräte verwalten
       summary: "Eine Liste aller angelegten Vorräte. Wenn keine Vorräte angelegt sind, wird null zurück gegeben."
+      parameters:
+        - in: query
+          name: sort 
+          schema:
+            type: string
+            default: id
+            enum:
+              - id
+              - articlestr
+              - boxstr
+              - expiry
+          description: "Ausgabe sortiert nach:"
+        - in: query
+          name: order 
+          schema: 
+            type: string
+            default: asc
+            enum:
+              - asc 
+              - desc
+          description: |
+            Sortierrichtung
+            * asc - Aufsteigend A-Z
+            * desc - Absteigend Z-A
       responses:
         "200":
           description: OK
@@ -281,7 +308,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/StockID"
+                  $ref:  "#/components/schemas/StockID"
     put:
       tags:
         - "Vorräte verwalten"
@@ -350,20 +377,6 @@ paths:
           $ref: "#/components/responses/400"
         "404":
           $ref: "#/components/responses/404"
-  /stocks/rich:
-    get:
-      tags:
-        - Vorräte verwalten
-      summary: "Eine angereicherte Liste aller angelegten Vorräte. Wenn keine Vorräte angelegt sind, wird null zurück gegeben."
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/StockRich"
 components:
   schemas:
     Box:
@@ -442,11 +455,6 @@ components:
             id:
               type: integer
               example: 1
-        - $ref: "#/components/schemas/Stock"
-    StockRich:
-      allOf:
-        - type: object
-          properties:
             articlestr:
               type: string
               example: Mehl
@@ -456,7 +464,7 @@ components:
             unitstr:
               type: string
               example: kg
-        - $ref: "#/components/schemas/StockID"
+        - $ref: "#/components/schemas/Stock"
   responses:
     "204":
       description: No Content - Es gibt keinen Inhalt, den man für diese Anfrage senden kann, aber die Kopfzeilen können nützlich sein.

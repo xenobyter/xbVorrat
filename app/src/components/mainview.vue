@@ -3,10 +3,66 @@
     <h1>Vorrat</h1>
     <table>
       <tr>
-        <th>Name</th>
-        <!-- TODO: Sortierfunktion -->
-        <th>Box</th>
-        <th>Datum</th>
+        <th v-on:click="sort('articlestr')">
+          Name
+          <img
+            v-if="sortBy == 'articlestr' && order == 'asc'"
+            src="/icons/sort_black_24dp.svg"
+            style="transform: scaleY(-1)"
+            alt="Aufsteigend"
+          />
+          <img
+            v-if="sortBy == 'articlestr' && order == 'desc'"
+            src="/icons/sort_black_24dp.svg"
+            alt="Absteigend"
+          />
+          <img
+            v-if="sortBy != 'articlestr'"
+            src="/icons/sort_black_24dp.svg"
+            alt="Ausgeblendet"
+            style="visibility: hidden"
+          />
+        </th>
+        <th v-on:click="sort('boxstr')">
+          Box
+          <img
+            v-if="sortBy == 'boxstr' && order == 'asc'"
+            src="/icons/sort_black_24dp.svg"
+            style="transform: scaleY(-1)"
+            alt="Aufsteigend"
+          />
+          <img
+            v-if="sortBy == 'boxstr' && order == 'desc'"
+            src="/icons/sort_black_24dp.svg"
+            alt="Absteigend"
+          />
+          <img
+            v-if="sortBy != 'boxstr'"
+            src="/icons/sort_black_24dp.svg"
+            alt="Ausgeblendet"
+            style="visibility: hidden"
+          />
+        </th>
+        <th v-on:click="sort('expiry')">
+          Datum
+          <img
+            v-if="sortBy == 'expiry' && order == 'asc'"
+            src="/icons/sort_black_24dp.svg"
+            style="transform: scaleY(-1)"
+            alt="Aufsteigend"
+          />
+          <img
+            v-if="sortBy == 'expiry' && order == 'desc'"
+            src="/icons/sort_black_24dp.svg"
+            alt="Absteigend"
+          />
+          <img
+            v-if="sortBy != 'expiry'"
+            src="/icons/sort_black_24dp.svg"
+            alt="Ausgeblendet"
+            style="visibility: hidden"
+          />
+        </th>
         <th colspan="4">Menge</th>
         <th></th>
       </tr>
@@ -80,16 +136,38 @@ export default {
           quantity: 2,
           expiry: "31.12.2021",
         },
+        {
+          id: 2,
+          article: 1,
+          articlestr: "Mehl2",
+          box: 1,
+          boxstr: "Box1",
+          size: 0.5,
+          unitstr: "kg",
+          quantity: 2,
+          expiry: "31.12.2021",
+        },
       ],
       stock: Object,
       status: "",
       showedit: false,
+      sortBy: "id",
+      order: "asc",
+      tblHeader: { articlestr: "Name" },
     };
   },
   methods: {
     stocksGET() {
       axios
-        .get(this.api + "/stocks/rich", { timeout: 900 })
+        .get(
+          this.api +
+            "/stocks" +
+            "?sort=" +
+            this.sortBy +
+            "&order=" +
+            this.order,
+          { timeout: 900 }
+        )
         .then((response) => {
           this.stocks = response.data;
         })
@@ -186,6 +264,14 @@ export default {
           break;
       }
     },
+    sort(arg) {
+      if (this.sortBy != arg) {
+        this.sortBy = arg;
+      } else {
+        this.order = this.order == "asc" ? "desc" : "asc";
+      }
+      this.stocksGET();
+    },
   },
   mounted() {
     window.addEventListener("keyup", this.keyHandler);
@@ -226,6 +312,9 @@ td.nopad {
   padding: 0;
   margin: 0;
   width: 0.6rem;
+}
+th img {
+  vertical-align: middle;
 }
 @media screen and (max-width: 320px) {
   td,

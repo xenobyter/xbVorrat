@@ -91,13 +91,10 @@ func expiryDateCheck(stock Stock) error {
 	return datErr
 }
 
-func stocksGET(c *gin.Context) {
-	res := dbStocksGET()
-	c.JSON(http.StatusOK, res)
-}
-
 func stocksRichGET(c *gin.Context) {
-	res := dbStocksRichGET()
+	sort := c.DefaultQuery("sort", "id")
+	order := c.DefaultQuery("order", "asc")
+	res := dbStocksRichGET(sort, order)
 	c.JSON(http.StatusOK, res)
 }
 

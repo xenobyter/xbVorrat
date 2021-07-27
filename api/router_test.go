@@ -9,6 +9,7 @@ import (
 
 func TestBoxes(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 
 	tests := []struct {
@@ -45,5 +46,4 @@ func TestBoxes(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }

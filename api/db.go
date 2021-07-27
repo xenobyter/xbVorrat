@@ -199,9 +199,20 @@ func dbStocksGET() (stocks Stocks) {
 	}
 	return stocks
 }
-func dbStocksRichGET() (stocks StocksRich) {
+func dbStocksRichGET(aSort, aOrder string) (stocks StocksRich) {
+	mSort := map[string]string{"id": "stocks.rowid", "articlestr": "articles.name", "boxstr": "boxes.name", "expiry": "SubStr(expiry,7,4)||SubStr(expiry,4,2)||SubStr(expiry,1,2)"}
+	mOrder := map[string]string{"asc": "ASC", "desc": "DESC"}
+	qSort, ok := mSort[aSort]
+	if !ok {
+		qSort = mSort["id"]
+	}
+	qOrder, ok := mOrder[aOrder]
+	if !ok {
+		qOrder = mOrder["asc"]
+	}
+
 	stock := make(StocksRich, 1)
-	queryStmt := "SELECT stocks.rowid, article, articles.name, box, boxes.name, size, units.unit, quantity, expiry from stocks INNER JOIN articles on articles.rowid = stocks.article INNER JOIN boxes on boxes.rowid = stocks.box INNER JOIN units on units.rowid = articles.unit;"
+	queryStmt := fmt.Sprintf("SELECT stocks.rowid, article, articles.name, box, boxes.name, size, units.unit, quantity, expiry from stocks INNER JOIN articles on articles.rowid = stocks.article INNER JOIN boxes on boxes.rowid = stocks.box INNER JOIN units on units.rowid = articles.unit ORDER BY %v %v;", qSort, qOrder)
 	rows, err := db.Query(queryStmt)
 	if err != nil {
 		log.Fatalf("Error in Query: %v", err)

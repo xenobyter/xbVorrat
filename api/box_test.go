@@ -10,6 +10,7 @@ import (
 
 func TestPUTBoxes(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 
 	tests := []struct {
@@ -40,11 +41,11 @@ func TestPUTBoxes(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func TestGETBoxes(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 
 	tests := []struct {
@@ -77,11 +78,11 @@ func TestGETBoxes(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func TestPATCHBoxes(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 
 	tests := []struct {
@@ -116,11 +117,11 @@ func TestPATCHBoxes(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func TestDELETEBoxes(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 	dbStocksPUT(Stock{1,2,1,1,"31.12.2021"})
 
@@ -156,5 +157,4 @@ func TestDELETEBoxes(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }

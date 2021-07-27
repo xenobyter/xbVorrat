@@ -9,6 +9,7 @@ import (
 
 func TestPUTUnits(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 
 	tests := []struct {
@@ -39,11 +40,11 @@ func TestPUTUnits(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func TestGETUnits(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 
 	tests := []struct {
@@ -79,6 +80,7 @@ func TestGETUnits(t *testing.T) {
 
 func TestPATCHUnits(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 
 	tests := []struct {
@@ -113,11 +115,11 @@ func TestPATCHUnits(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func TestDELETEUnits(t *testing.T) {
 	setupDB()
+	defer teardownDB()
 	router := SetupRouter()
 	dbArticlesPUT(Article{"name", 2})
 
@@ -153,7 +155,6 @@ func TestDELETEUnits(t *testing.T) {
 		})
 	}
 
-	teardownDB()
 }
 
 func TestUnits_contains(t *testing.T) {
