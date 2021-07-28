@@ -304,8 +304,8 @@ func Test_dbArticlesGET(t *testing.T) {
 		wantArticles Articles
 	}{
 		{"Leere Liste", nil},
-		{"Ein Artikel", Articles{{1, "name", 1}}},
-		{"Zwei Artikel", Articles{{1, "name", 1}, {2, "name", 1}}},
+		{"Ein Artikel", Articles{{1, "name", 1, 0}}},
+		{"Zwei Artikel", Articles{{1, "name", 1, 0}, {2, "name", 1, 0}}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -333,9 +333,9 @@ func Test_dbArticlesPATCH(t *testing.T) {
 		wantStatus   int
 	}{
 		{"PATCH bei leerer DB", args{0, Article{"name", 1}}, nil, http.StatusNotFound},
-		{"PATCH korrekter Artikel", args{1, Article{"neu", 1}}, Articles{{1, "neu", 1}}, http.StatusNoContent},
-		{"PATCH falsche ID", args{10, Article{"neu", 1}}, Articles{{1, "neu", 1}, {2, "name", 1}}, http.StatusNotFound},
-		{"PATCH ohne Name", args{1, Article{"", 1}}, Articles{{1, "neu", 1}, {2, "name", 1}, {3, "name", 1}}, http.StatusBadRequest},
+		{"PATCH korrekter Artikel", args{1, Article{"neu", 1}}, Articles{{1, "neu", 1, 0}}, http.StatusNoContent},
+		{"PATCH falsche ID", args{10, Article{"neu", 1}}, Articles{{1, "neu", 1, 0}, {2, "name", 1, 0}}, http.StatusNotFound},
+		{"PATCH ohne Name", args{1, Article{"", 1}}, Articles{{1, "neu", 1, 0}, {2, "name", 1, 0}, {3, "name", 1, 0}}, http.StatusBadRequest},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -367,7 +367,7 @@ func Test_dbArticlesDELETE(t *testing.T) {
 	}{
 		{"DELETE bei leerer DB", args{"articles", 1}, http.StatusNotFound, nil},
 		{"DELETE korrekter Artikel", args{"articles", 1}, http.StatusNoContent, nil},
-		{"DELETE falscher Artikel", args{"articles", 10}, http.StatusNotFound, Articles{{1, "name", 1}}},
+		{"DELETE falscher Artikel", args{"articles", 10}, http.StatusNotFound, Articles{{1, "name", 1,0}}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -464,7 +464,7 @@ func Test_dbStocksPATCH(t *testing.T) {
 func Test_dbStocksRichGET(t *testing.T) {
 	setupDB()
 	defer teardownDB()
-	
+
 	dbBoxesPUT(Box{"Box1", ""})
 	dbBoxesPUT(Box{"Box2", ""})
 	dbArticlesPUT(Article{"Artikel1", 1})

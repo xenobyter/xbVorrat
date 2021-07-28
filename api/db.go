@@ -127,14 +127,14 @@ func dbArticlesPUT(article Article) (id int64) {
 
 func dbArticlesGET() (articles Articles) {
 	article := make(Articles, 1)
-	queryStmt := "SELECT rowid, name, unit FROM articles;"
+	queryStmt := "SELECT articles.rowid, name, unit, COALESCE(quantity * size,0) FROM articles LEFT JOIN stocks on articles.rowid = stocks.article;"
 	rows, err := db.Query(queryStmt)
 	if err != nil {
 		log.Fatalf("Error in Query: %v", err)
 	}
 
 	for rows.Next() {
-		err = rows.Scan(&article[0].ID, &article[0].Name, &article[0].UnitID)
+		err = rows.Scan(&article[0].ID, &article[0].Name, &article[0].UnitID, &article[0].Quantity)
 		if err != nil {
 			log.Fatalf("Error in Scanning Rows:")
 		}

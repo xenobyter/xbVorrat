@@ -7,5 +7,9 @@
         "rowid",
         "sqlite",
         "xenobyter"
-    ]
+    ],
+    "vscode-edge-devtools.defaultUrl": "http://localhost:8080",
+    "vscode-edge-devtools.showWorkers": true,
+    "vscode-edge-devtools.webRoot": "${workspaceFolder}/app",
+    "vscode-edge-devtools.welcome": false
 }

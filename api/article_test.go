@@ -52,6 +52,7 @@ func Test_articlesGET(t *testing.T) {
 	defer teardownDB()
 	router := SetupRouter()
 	dbUnitsPUT(Unit{"kg", "Kilogramm"})
+	dbStocksPUT(Stock{2, 1, 2.5, 2, "01.01.2000"})
 
 	tests := []struct {
 		name   string
@@ -62,8 +63,8 @@ func Test_articlesGET(t *testing.T) {
 		status int
 	}{
 		{"GET leere Liste", "GET", "/api/articles", "", "null", 200},
-		{"GET ein Artikel", "GET", "/api/articles", "", `[{"id":1,"name":"name","unit":1}]`, 200},
-		{"GET zwei Artikel", "GET", "/api/articles", "", `[{"id":1,"name":"name","unit":1},{"id":2,"name":"name","unit":1}]`, 200},
+		{"GET ein Artikel", "GET", "/api/articles", "", `[{"id":1,"name":"name","unit":1,"quantity":0}]`, 200},
+		{"GET zwei Artikel", "GET", "/api/articles", "", `[{"id":1,"name":"name","unit":1,"quantity":0},{"id":2,"name":"name","unit":1,"quantity":5}]`, 200},
 	}
 	for _, tt := range tests {
 
@@ -175,8 +176,8 @@ func TestArticles_contains(t *testing.T) {
 		args args
 		want bool
 	}{
-		{"Einfaches true", Articles{{3, "name", 1}}, args{3}, true},
-		{"Einfaches false", Articles{{3, "name", 1}}, args{2}, false},
+		{"Einfaches true", Articles{{3, "name", 1, 0}}, args{3}, true},
+		{"Einfaches false", Articles{{3, "name", 1, 0}}, args{2}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

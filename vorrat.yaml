@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   title: xbVorrat API
-  version: "1.1.0"
+  version: "1.2.0"
   description: |
     Die API für xbVorrat ermöglicht die Verwaltung von zu bevorratenden Gegenständen in Lagerboxen.
 
@@ -10,6 +10,7 @@ info:
     --------|-------------
     1.0.0   | Initiale Version
     1.1.0   | Der Endpunkt /stocks/rich wird zurück gebaut, die Funktionalität wird in der GET-Methode von /stocks integriert. Ein zusätzlicher query-Parameter zur Sortierung wurde hinzugefügt.
+    1.2.0   | GET-Response für /articles um die eingelagerte Menge des Artikels erweitert
 servers:
   - url: http://localhost:8081/api
 paths:
@@ -429,6 +430,11 @@ components:
             id:
               type: integer
         - $ref: "#/components/schemas/Article"
+        - type: object
+          properties:
+            quantity:
+              type: number
+              example: 1.5
     Stock:
       type: object
       properties:

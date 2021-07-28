@@ -7,7 +7,9 @@
           <div class="articleLeft">{{ article.id }}</div>
           <div class="articleMain">
             <div class="articleName">{{ article.name }}</div>
-            <div class="articleNotiz">{{ article.long }}</div>
+            <div class="articleNotiz">
+              Bestand: {{ fixed(article.quantity) }}{{ article.short }}
+            </div>
           </div>
           <div class="articleRight">
             <button v-on:click="articleEDIT(article)" class="edit">
@@ -67,6 +69,7 @@ export default {
           unit: 1,
           long: "Kilogramm",
           short: "kg",
+          quantity: 1,
         },
         {
           id: 2,
@@ -74,6 +77,7 @@ export default {
           unit: 2,
           long: "Liter",
           short: "l",
+          quantity: 2.5,
         },
       ],
       units: [
@@ -201,6 +205,9 @@ export default {
           this.$emit("nav", "");
           break;
       }
+    },
+    fixed(num) {
+      return num.toFixed(1);
     },
   },
   mounted() {

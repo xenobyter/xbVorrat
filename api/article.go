@@ -16,6 +16,7 @@ type Articles []struct {
 	ID     int64  `json:"id"`
 	Name   string `json:"name"`
 	UnitID int64  `json:"unit"`
+	Quantity float64 `json:"quantity"`
 }
 
 func (a Articles) contains(id int64) bool {
