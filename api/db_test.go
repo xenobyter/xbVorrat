@@ -298,14 +298,16 @@ func Test_dbArticlesPUT(t *testing.T) {
 func Test_dbArticlesGET(t *testing.T) {
 	setupDB()
 	defer teardownDB()
+	dbStocksPUT(Stock{1,1,1,1,"01.01.2000"})
+	dbStocksPUT(Stock{1,1,1,1,"01.01.2000"})
 
 	tests := []struct {
 		name         string
 		wantArticles Articles
 	}{
 		{"Leere Liste", nil},
-		{"Ein Artikel", Articles{{1, "name", 1, 0}}},
-		{"Zwei Artikel", Articles{{1, "name", 1, 0}, {2, "name", 1, 0}}},
+		{"Ein Artikel", Articles{{1, "name", 1, 2}}},
+		{"Zwei Artikel", Articles{{1, "name", 1, 2}, {2, "name", 1, 0}}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

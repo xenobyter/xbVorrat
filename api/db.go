@@ -127,7 +127,7 @@ func dbArticlesPUT(article Article) (id int64) {
 
 func dbArticlesGET() (articles Articles) {
 	article := make(Articles, 1)
-	queryStmt := "SELECT articles.rowid, name, unit, COALESCE(quantity * size,0) FROM articles LEFT JOIN stocks on articles.rowid = stocks.article;"
+	queryStmt := "SELECT articles.rowid, name, unit, SUM(COALESCE(quantity * size,0)) FROM articles LEFT JOIN stocks on articles.rowid = stocks.article GROUP BY articles.rowid;"
 	rows, err := db.Query(queryStmt)
 	if err != nil {
 		log.Fatalf("Error in Query: %v", err)
