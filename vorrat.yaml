@@ -11,6 +11,7 @@ info:
     1.0.0   | Initiale Version
     1.1.0   | Der Endpunkt /stocks/rich wird zurück gebaut, die Funktionalität wird in der GET-Methode von /stocks integriert. Ein zusätzlicher query-Parameter zur Sortierung wurde hinzugefügt.
     1.2.0   | GET-Response für /articles um die eingelagerte Menge des Artikels erweitert
+    1.3.0   | GET-Response für /stocks um die Kennzeichnung abgelaufener Vorräte erweitert
 servers:
   - url: http://localhost:8081/api
 paths:
@@ -470,6 +471,8 @@ components:
             unitstr:
               type: string
               example: kg
+            expired:
+              type: boolean
         - $ref: "#/components/schemas/Stock"
   responses:
     "204":

@@ -69,7 +69,7 @@
       <tr v-for="stock in stocks" v-bind:key="stock.id">
         <td>{{ stock.articlestr }}</td>
         <td>{{ stock.boxstr }}</td>
-        <td>{{ stock.expiry }}</td>
+        <td v-bind:class="{ expired: stock.expired }">{{ stock.expiry }}</td>
         <td class="nopad">{{ stock.quantity }}</td>
         <td class="nopad">&#215;</td>
         <td class="nopad">{{ stock.size }}</td>
@@ -145,7 +145,7 @@ export default {
           size: 0.5,
           unitstr: "kg",
           quantity: 2,
-          expiry: "31.12.2021",
+          expiry: "31.12.2000",
         },
       ],
       stock: Object,
@@ -245,7 +245,7 @@ export default {
       }
     },
     keyHandler(e) {
-      if (this.showedit) return
+      if (this.showedit) return;
       switch (e.key) {
         case "+":
           this.stockADD();
@@ -315,6 +315,9 @@ td.nopad {
 }
 th img {
   vertical-align: middle;
+}
+.expired {
+  color: rgb(236, 12, 12);
 }
 @media screen and (max-width: 320px) {
   td,

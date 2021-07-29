@@ -70,8 +70,8 @@ func Test_stocksGET(t *testing.T) {
 		status int
 	}{
 		{"GET leere Liste", "GET", "/api/stocks", "", "null", 200},
-		{"GET ein Artikel", "GET", "/api/stocks", "", `[{"id":1,"article":1,"box":1,"size":0.5,"quantity":2,"expiry":"31.12.2021","articlestr":"Article","boxstr":"Box","unitstr":"u"}]`, 200},
-		{"GET zwei Artikel", "GET", "/api/stocks", "", `[{"id":1,"article":1,"box":1,"size":0.5,"quantity":2,"expiry":"31.12.2021","articlestr":"Article","boxstr":"Box","unitstr":"u"},{"id":2,"article":1,"box":1,"size":0.5,"quantity":2,"expiry":"31.12.2021","articlestr":"Article","boxstr":"Box","unitstr":"u"}]`, 200},
+		{"GET ein Artikel", "GET", "/api/stocks", "", `[{"id":1,"article":1,"box":1,"size":0.5,"quantity":2,"expiry":"31.12.2021","articlestr":"Article","boxstr":"Box","unitstr":"u","expired":false}]`, 200},
+		{"GET zwei Artikel", "GET", "/api/stocks", "", `[{"id":1,"article":1,"box":1,"size":0.5,"quantity":2,"expiry":"31.12.2021","articlestr":"Article","boxstr":"Box","unitstr":"u","expired":false},{"id":2,"article":1,"box":1,"size":0.5,"quantity":2,"expiry":"31.12.2021","articlestr":"Article","boxstr":"Box","unitstr":"u","expired":false}]`, 200},
 	}
 	for _, tt := range tests {
 

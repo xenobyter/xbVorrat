@@ -35,6 +35,7 @@ type StocksRich []struct {
 	ArticleName string  `json:"articlestr"`
 	BoxName     string  `json:"boxstr"`
 	Unit        string  `json:"unitstr"`
+	Expired     bool    `json:"expired"`
 }
 
 func (s Stocks) containsBox(id int64) bool {

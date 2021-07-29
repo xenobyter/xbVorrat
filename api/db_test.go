@@ -298,8 +298,8 @@ func Test_dbArticlesPUT(t *testing.T) {
 func Test_dbArticlesGET(t *testing.T) {
 	setupDB()
 	defer teardownDB()
-	dbStocksPUT(Stock{1,1,1,1,"01.01.2000"})
-	dbStocksPUT(Stock{1,1,1,1,"01.01.2000"})
+	dbStocksPUT(Stock{1, 1, 1, 1, "01.01.2000"})
+	dbStocksPUT(Stock{1, 1, 1, 1, "01.01.2000"})
 
 	tests := []struct {
 		name         string
@@ -369,7 +369,7 @@ func Test_dbArticlesDELETE(t *testing.T) {
 	}{
 		{"DELETE bei leerer DB", args{"articles", 1}, http.StatusNotFound, nil},
 		{"DELETE korrekter Artikel", args{"articles", 1}, http.StatusNoContent, nil},
-		{"DELETE falscher Artikel", args{"articles", 10}, http.StatusNotFound, Articles{{1, "name", 1,0}}},
+		{"DELETE falscher Artikel", args{"articles", 10}, http.StatusNotFound, Articles{{1, "name", 1, 0}}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -473,8 +473,8 @@ func Test_dbStocksRichGET(t *testing.T) {
 	dbArticlesPUT(Article{"Artikel2", 2})
 	dbUnitsPUT(Unit{"u1", ""})
 	dbUnitsPUT(Unit{"u2", ""})
-	dbStocksPUT(Stock{1, 1, 0.5, 2, "01.01.2021"})
-	dbStocksPUT(Stock{2, 2, 0.5, 2, "31.12.2020"})
+	dbStocksPUT(Stock{1, 1, 0.5, 2, "01.01.0001"})
+	dbStocksPUT(Stock{2, 2, 0.5, 2, "31.12.9999"})
 	type args struct {
 		sort, order string
 	}
@@ -483,13 +483,13 @@ func Test_dbStocksRichGET(t *testing.T) {
 		args       args
 		wantStocks StocksRich
 	}{
-		{"Zwei Artikel", args{"", ""}, StocksRich{{1, 1, 1, 0.5, 2, "01.01.2021", "Artikel1", "Box1", "u1"}, {2, 2, 2, 0.5, 2, "31.12.2020", "Artikel2", "Box2", "u2"}}},
-		{"Sort ID Aufsteigend", args{"id", "asc"}, StocksRich{{1, 1, 1, 0.5, 2, "01.01.2021", "Artikel1", "Box1", "u1"}, {2, 2, 2, 0.5, 2, "31.12.2020", "Artikel2", "Box2", "u2"}}},
-		{"Sort ID Absteigend", args{"id", "desc"}, StocksRich{{2, 2, 2, 0.5, 2, "31.12.2020", "Artikel2", "Box2", "u2"}, {1, 1, 1, 0.5, 2, "01.01.2021", "Artikel1", "Box1", "u1"}}},
-		{"Sort ID falsche Sortierung", args{"_", "asc"}, StocksRich{{1, 1, 1, 0.5, 2, "01.01.2021", "Artikel1", "Box1", "u1"}, {2, 2, 2, 0.5, 2, "31.12.2020", "Artikel2", "Box2", "u2"}}},
-		{"Sort ID falsche Richtung", args{"id", "_"}, StocksRich{{1, 1, 1, 0.5, 2, "01.01.2021", "Artikel1", "Box1", "u1"}, {2, 2, 2, 0.5, 2, "31.12.2020", "Artikel2", "Box2", "u2"}}},
-		{"Sort ID Artikel absteigend", args{"articlestr", "desc"}, StocksRich{{2, 2, 2, 0.5, 2, "31.12.2020", "Artikel2", "Box2", "u2"}, {1, 1, 1, 0.5, 2, "01.01.2021", "Artikel1", "Box1", "u1"}}},
-		{"Sort ID Datum absteigend", args{"expiry", "desc"}, StocksRich{{1, 1, 1, 0.5, 2, "01.01.2021", "Artikel1", "Box1", "u1"}, {2, 2, 2, 0.5, 2, "31.12.2020", "Artikel2", "Box2", "u2"}}},
+		{"Zwei Artikel", args{"", ""}, StocksRich{{1, 1, 1, 0.5, 2, "01.01.0001", "Artikel1", "Box1", "u1", true}, {2, 2, 2, 0.5, 2, "31.12.9999", "Artikel2", "Box2", "u2", false}}},
+		{"Sort ID Aufsteigend", args{"id", "asc"}, StocksRich{{1, 1, 1, 0.5, 2, "01.01.0001", "Artikel1", "Box1", "u1", true}, {2, 2, 2, 0.5, 2, "31.12.9999", "Artikel2", "Box2", "u2", false}}},
+		{"Sort ID Absteigend", args{"id", "desc"}, StocksRich{{2, 2, 2, 0.5, 2, "31.12.9999", "Artikel2", "Box2", "u2", false}, {1, 1, 1, 0.5, 2, "01.01.0001", "Artikel1", "Box1", "u1", true}}},
+		{"Sort ID falsche Sortierung", args{"_", "asc"}, StocksRich{{1, 1, 1, 0.5, 2, "01.01.0001", "Artikel1", "Box1", "u1", true}, {2, 2, 2, 0.5, 2, "31.12.9999", "Artikel2", "Box2", "u2", false}}},
+		{"Sort ID falsche Richtung", args{"id", "_"}, StocksRich{{1, 1, 1, 0.5, 2, "01.01.0001", "Artikel1", "Box1", "u1", true}, {2, 2, 2, 0.5, 2, "31.12.9999", "Artikel2", "Box2", "u2", false}}},
+		{"Sort ID Artikel absteigend", args{"articlestr", "desc"}, StocksRich{{2, 2, 2, 0.5, 2, "31.12.9999", "Artikel2", "Box2", "u2", false}, {1, 1, 1, 0.5, 2, "01.01.0001", "Artikel1", "Box1", "u1", true}}},
+		{"Sort ID Datum absteigend", args{"expiry", "desc"}, StocksRich{{2, 2, 2, 0.5, 2, "31.12.9999", "Artikel2", "Box2", "u2", false}, {1, 1, 1, 0.5, 2, "01.01.0001", "Artikel1", "Box1", "u1", true}}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

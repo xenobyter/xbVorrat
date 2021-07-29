@@ -12,6 +12,13 @@
       "webRoot": "${workspaceFolder}/app"
     },
     {
+      "name": "Launch Edge DevTools",
+      "request": "launch",
+      "type": "vscode-edge-devtools.debug",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}/app"
+    },
+    {
       "type": "browser-preview",
       "request": "launch",
       "name": "Launch Browser Preview",
@@ -34,12 +41,5 @@
       "port": 2345,
       "host": "127.0.0.1"
     },
-    {
-      "name": "Launch Microsoft Edge and open the Edge DevTools",
-      "request": "launch",
-      "type": "vscode-edge-devtools.debug",
-      "url": "http://localhost:8080",
-      "webRoot": "${workspaceFolder}/app"
-    }
   ]
 }
